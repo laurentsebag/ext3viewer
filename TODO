@@ -1,0 +1,22 @@
+Altough the project works pretty well there are still things to correct.
+Here is the TODO list :
+
+ - cleaning code : a lot of the source code should be cleaned ; output functions
+   have to be rewritten so that the same functions for the gui and the console
+   could be called
+
+ - find more details and specs about jbd
+
+ - implement a complete acl functionality 
+
+ - implement help functions in the gui : it could explain how the filesystem
+   works... like lesson for IT students
+
+ - improve interactivity in the gui. eg.: block number could be links for 
+   bpoint
+
+ - implement input of files as a string. ex: /etc/foo.conf
+
+ - ... and many other things
+
+Laurent Sebag <ext3viewer@free.fr>

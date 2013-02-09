@@ -1,0 +1,184 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+ACL_GROUP	acl.h	69;"	d
+ACL_GROUP_OBJ	acl.h	68;"	d
+ACL_H	acl.h	27;"	d
+ACL_MASK	acl.h	70;"	d
+ACL_OTHER	acl.h	71;"	d
+ACL_USER	acl.h	67;"	d
+ACL_USER_OBJ	acl.h	66;"	d
+A_LCOL	text.h	32;"	d
+A_LINE	text.h	31;"	d
+BLOCK_H	block.h	27;"	d
+BOOT_SECTOR_OFFSET	filesystem.h	38;"	d
+CC	Makefile	/^CC=gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-D_FILE_OFFSET_BITS=64 -Wall #-DEFENCE#-gstabs #-DDEBUG -DDEBUG_VERBOSE #-pedantic$/;"	m
+DEBUG_PRINT	debug.h	33;"	d
+DEBUG_PRINT	debug.h	36;"	d
+DEBUG_PRINT_V	debug.h	40;"	d
+DEBUG_PRINT_V	debug.h	43;"	d
+EXT3_XATTR_MAGIC	acl.h	42;"	d
+FILESYSTEM_H	filesystem.h	27;"	d
+GROUPS_H	groups.h	27;"	d
+HELP_TXT	text.h	34;"	d
+HELP_TXT_VERBOSE	text.h	42;"	d
+HEXA_DATA	filesystem.h	41;"	d
+INODE_H	inode.h	27;"	d
+JFS_COMMIT_BLOCK	journal.h	126;"	d
+JFS_DESCRIPTOR_BLOCK	journal.h	125;"	d
+JFS_FLAG_DELETED	journal.h	134;"	d
+JFS_FLAG_ESCAPE	journal.h	132;"	d
+JFS_FLAG_LAST_TAG	journal.h	135;"	d
+JFS_FLAG_SAME_UUID	journal.h	133;"	d
+JFS_MAGIC_NUMBER	journal.h	44;"	d
+JFS_REVOKE_BLOCK	journal.h	129;"	d
+JFS_SUPERBLOCK_V1	journal.h	127;"	d
+JFS_SUPERBLOCK_V2	journal.h	128;"	d
+JOURNAL_H	journal.h	27;"	d
+LANG_H	text.h	27;"	d
+LDFLAGS	Makefile	/^LDFLAGS= #-lefence$/;"	m
+MACROS_H	debug.h	27;"	d
+OFILES	Makefile	/^OFILES=acl.o filesystem.o inode.o search.o block.o groups.o journal.o path.o \\$/;"	m
+PATH_H	path.h	27;"	d
+PLAIN_DATA	filesystem.h	42;"	d
+SEARCH_H	search.h	27;"	d
+SUPERBLOCK_H	superblock.h	27;"	d
+SUPER_BLOCK_OFFSET	filesystem.h	39;"	d
+TARGET	Makefile	/^TARGET=..\/ext3Viewer$/;"	m
+UTILS_H	acl.h	35;"	d
+__be16	filesystem.h	/^typedef unsigned short __be16;$/;"	t
+__be32	filesystem.h	/^typedef unsigned int __be32;$/;"	t
+__le16	filesystem.h	/^typedef unsigned short __le16; $/;"	t
+__le32	filesystem.h	/^typedef unsigned int __le32;$/;"	t
+bitmap_test_free	groups.c	/^int bitmap_test_free(char content )$/;"	f
+close_fs	filesystem.c	/^int close_fs ( int fd ) {$/;"	f
+dump_journal	journal.c	/^int dump_journal ( int fd, int block_size, struct ext3_inode *i ) {$/;"	f
+dump_journal_block	journal.c	/^int dump_journal_block ( int fd, int block_size, __u32 block_num ) {$/;"	f
+dump_journal_block_rec	journal.c	/^int dump_journal_block_rec ( int fd, int block_size, __u32 block_num,$/;"	f
+e_hash	acl.h	/^    __le32  e_hash;         \/* hash value of name and value *\/$/;"	m	struct:ext3_xattr_entry
+e_name	acl.h	/^    char    e_name[0];      \/* attribute name *\/$/;"	m	struct:ext3_xattr_entry
+e_name_index	acl.h	/^    __u8    e_name_index;   \/* attribute name index *\/$/;"	m	struct:ext3_xattr_entry
+e_name_len	acl.h	/^    __u8    e_name_len;     \/* length of name *\/$/;"	m	struct:ext3_xattr_entry
+e_value_block	acl.h	/^    __le32  e_value_block;  \/* disk block attribute is stored on (n\/i) *\/$/;"	m	struct:ext3_xattr_entry
+e_value_offs	acl.h	/^    __le16  e_value_offs;   \/* offset in disk block of value *\/$/;"	m	struct:ext3_xattr_entry
+e_value_size	acl.h	/^    __le32  e_value_size;   \/* size of attribute value *\/$/;"	m	struct:ext3_xattr_entry
+ext3_xattr_entry	acl.h	/^struct ext3_xattr_entry {$/;"	s
+ext3_xattr_header	acl.h	/^  struct ext3_xattr_header {$/;"	s
+ext3_xattr_ibody_header	acl.h	/^struct ext3_xattr_ibody_header {$/;"	s
+fill_path_name	path.c	/^void fill_path_name( struct path_filo *p, char *string )$/;"	f
+free_path	path.c	/^void free_path(struct path_filo **p)$/;"	f
+h_blocks	acl.h	/^      __le32  h_blocks;       \/* number of disk blocks used *\/$/;"	m	struct:ext3_xattr_header
+h_blocktype	journal.h	/^    __be32          h_blocktype;$/;"	m	struct:journal_header_s
+h_hash	acl.h	/^      __le32  h_hash;         \/* hash value of all attributes *\/$/;"	m	struct:ext3_xattr_header
+h_magic	acl.h	/^      __le32  h_magic;        \/* magic number for identification *\/$/;"	m	struct:ext3_xattr_header
+h_magic	acl.h	/^    __le32  h_magic;        \/* magic number for identification *\/$/;"	m	struct:ext3_xattr_ibody_header
+h_magic	journal.h	/^    __be32          h_magic;$/;"	m	struct:journal_header_s
+h_refcount	acl.h	/^      __le32  h_refcount;     \/* reference count *\/$/;"	m	struct:ext3_xattr_header
+h_reserved	acl.h	/^      __u32   h_reserved[4];  \/* zero right now *\/$/;"	m	struct:ext3_xattr_header
+h_sequence	journal.h	/^    __be32          h_sequence;$/;"	m	struct:journal_header_s
+inode	path.h	/^  __u32 inode;$/;"	m	struct:path_filo
+is_pow_of	journal.c	/^int is_pow_of ( int num, int pow ) {$/;"	f
+journal_block_tag_s	journal.h	/^typedef struct journal_block_tag_s$/;"	s
+journal_block_tag_t	journal.h	/^} journal_block_tag_t;$/;"	t	typeref:struct:journal_block_tag_s
+journal_header_s	journal.h	/^typedef struct journal_header_s$/;"	s
+journal_header_t	journal.h	/^} journal_header_t;$/;"	t	typeref:struct:journal_header_s
+journal_revoke_header_s	journal.h	/^typedef struct journal_revoke_header_s$/;"	s
+journal_revoke_header_t	journal.h	/^} journal_revoke_header_t;$/;"	t	typeref:struct:journal_revoke_header_s
+journal_superblock_s	journal.h	/^typedef struct journal_superblock_s$/;"	s
+journal_superblock_t	journal.h	/^} journal_superblock_t;$/;"	t	typeref:struct:journal_superblock_s
+main	main.c	/^int main(int argc, char *argv[]) {$/;"	f
+mask	inode.c	/^int mask(const __u32 value,const __u32 macro)$/;"	f
+name	path.h	/^  char name[EXT3_NAME_LEN];$/;"	m	struct:path_filo
+open_fs	filesystem.c	/^int open_fs ( char * path ) {$/;"	f
+path_filo	path.h	/^struct path_filo$/;"	s
+path_filo	path.h	/^} path_filo ;$/;"	v	typeref:struct:path_filo
+prev	path.h	/^  struct path_filo *prev;$/;"	m	struct:path_filo	typeref:struct:path_filo::path_filo
+print_UUID	inode.c	/^void  print_UUID(const __u8 * tab_uuid)$/;"	f
+print_acl	acl.c	/^void print_acl(int fd,const struct ext3_super_block *sb,__u32 i_type_acl)    $/;"	f
+print_binary	inode.c	/^void print_binary(const __u32 value,int size)\/\/Print a number in binary form, 001010 style$/;"	f
+print_block_as_bpointer	block.c	/^void print_block_as_bpointer( int fd, struct ext3_super_block *sb, $/;"	f
+print_block_hexa	block.c	/^void print_block_hexa ( int fd, struct ext3_super_block *sb, __u32 block_num ) {$/;"	f
+print_block_hexa_noline	block.c	/^void print_block_hexa_noline ( int fd, struct ext3_super_block *sb,$/;"	f
+print_blockpointers	inode.c	/^void print_blockpointers( __u32 *i_block )$/;"	f
+print_blocks	block.c	/^void print_blocks ( int fd, struct ext3_super_block *sb,$/;"	f
+print_creatorOS	inode.c	/^void print_creatorOS(__u32 s_creator_os)$/;"	f
+print_datablock_blocknumber	groups.c	/^void print_datablock_blocknumber(const struct ext3_super_block* sb,$/;"	f
+print_datablockbitmap	groups.c	/^void print_datablockbitmap(const struct ext3_super_block *sb,$/;"	f
+print_dir	inode.c	/^void print_dir ( int fd, struct ext3_super_block *sb, __u32 i_num )$/;"	f
+print_dir_blocks	inode.c	/^void print_dir_blocks ( int fd, struct ext3_super_block *sb,$/;"	f
+print_errorbehavior	inode.c	/^void print_errorbehavior(__u16 s_errors)$/;"	f
+print_featROcompat	inode.c	/^void print_featROcompat(__u32 s_feature_ro_compat)$/;"	f
+print_featcompat	inode.c	/^void print_featcompat(__u32 s_feature_compat)$/;"	f
+print_featincompat	inode.c	/^void print_featincompat(__u32 s_feature_incompat)$/;"	f
+print_file	inode.c	/^void print_file ( int fd, struct ext3_super_block *sb, __u32 i_num, int mode )$/;"	f
+print_fileflags	inode.c	/^void print_fileflags(__u32 i_flags)\/\/The flag set has to be 'masked'$/;"	f
+print_filemode	inode.c	/^void print_filemode(__u16 i_mode)$/;"	f
+print_groupdesc	groups.c	/^void print_groupdesc ( const struct ext3_group_desc *gd) $/;"	f
+print_inode	inode.c	/^void print_inode(int fd,const struct ext3_super_block *sb, const struct ext3_inode *in) $/;"	f
+print_inodebitmap	groups.c	/^void print_inodebitmap(const struct ext3_super_block *sb, char *inodebitmap,$/;"	f
+print_inodeblocknumber	groups.c	/^void print_inodeblocknumber(const struct ext3_super_block *sb,$/;"	f
+print_journal_header	journal.c	/^void print_journal_header( struct journal_header_s *header ) {$/;"	f
+print_journal_revoke_header	journal.c	/^void print_journal_revoke_header( struct journal_revoke_header_s *header ) {$/;"	f
+print_journal_superblock	journal.c	/^void print_journal_superblock(struct journal_superblock_s * j)$/;"	f
+print_mountoptions	inode.c	/^void print_mountoptions(__u32 s_default_mount_opts)$/;"	f
+print_permissions	inode.c	/^void print_permissions(__u8 perm)$/;"	f
+print_revlev	inode.c	/^void print_revlev(__u32 s_minor_rev_level)$/;"	f
+print_sb_copy	superblock.c	/^void print_sb_copy ( const struct ext3_super_block *sb ) {$/;"	f
+print_state	inode.c	/^void print_state(__u16 s_state)$/;"	f
+print_superblock	superblock.c	/^void print_superblock ( const struct ext3_super_block *sb ) {$/;"	f
+print_symlink	inode.c	/^void print_symlink ( int fd, struct ext3_super_block *sb, __u32 i_num) {$/;"	f
+print_t_bin	block.c	/^void print_t_bin(char content)\/\/modified, Tested, working$/;"	f
+print_time	inode.c	/^void print_time(const __u32 timestamp)$/;"	f
+print_tree	inode.c	/^void print_tree( int fd, struct ext3_super_block *sb, struct ext3_inode *i ) {$/;"	f
+push	path.c	/^int push ( struct path_filo **p, const char * name, __u32 inode ) { $/;"	f
+r_count	journal.h	/^        __be32           r_count;       \/* Count of bytes used in the block *\/$/;"	m	struct:journal_revoke_header_s
+r_header	journal.h	/^        journal_header_t r_header;$/;"	m	struct:journal_revoke_header_s
+read_acl	acl.c	/^int read_acl(int fd,const struct ext3_super_block *sb, __u32 acl_position,$/;"	f
+read_aclh	acl.c	/^int read_aclh(int fd,const struct ext3_super_block *sb, __u32 acl_position,$/;"	f
+read_block	block.c	/^int read_block ( int fd, struct ext3_super_block *sb, $/;"	f
+read_block_pointer	block.c	/^int read_block_pointer ( int fd, int block_size, $/;"	f
+read_datablockbitmap	groups.c	/^int read_datablockbitmap( int fd, const struct ext3_super_block *sb,$/;"	f
+read_group_desc	groups.c	/^void read_group_desc(int fd,const struct ext3_super_block *sb, $/;"	f
+read_inode	inode.c	/^void read_inode( int fd, struct ext3_super_block *sb,$/;"	f
+read_inodebitmap	groups.c	/^int read_inodebitmap( int fd, const struct ext3_super_block *sb,$/;"	f
+read_journal_header	journal.c	/^int read_journal_header( int fd, int block_size, $/;"	f
+read_journal_revoke_header	journal.c	/^int read_journal_revoke_header(int fd, int block_size,$/;"	f
+read_journal_superblock	journal.c	/^int read_journal_superblock(int fd, int block_size, __u32 jsb_block_num, struct journal_superblock_s *jsb ) {$/;"	f
+read_superblock	superblock.c	/^int read_superblock ( int fd, struct ext3_super_block *sb ) {$/;"	f
+read_superblock_backup	superblock.c	/^int read_superblock_backup ( int fd, struct ext3_super_block *sb, $/;"	f
+read_superblock_gui	superblock.c	/^int read_superblock_gui ( int fd, struct ext3_super_block *sb ) {$/;"	f
+read_xattre	acl.c	/^int read_xattre(int fd,const struct ext3_super_block *sb, __u32 entry_blocknum,$/;"	f
+read_xattrh	acl.c	/^int read_xattrh(int fd,const struct ext3_super_block *sb, __u32 header_pos,$/;"	f
+remove_top	path.c	/^int remove_top(struct path_filo **p)$/;"	f
+s_blocksize	journal.h	/^    __be32  s_blocksize;            \/* journal device blocksize *\/$/;"	m	struct:journal_superblock_s
+s_dynsuper	journal.h	/^    __be32  s_dynsuper;             \/* Blocknr of dynamic superblock copy*\/$/;"	m	struct:journal_superblock_s
+s_errno	journal.h	/^    __be32  s_errno;$/;"	m	struct:journal_superblock_s
+s_feature_compat	journal.h	/^    __be32  s_feature_compat;       \/* compatible feature set *\/$/;"	m	struct:journal_superblock_s
+s_feature_incompat	journal.h	/^    __be32  s_feature_incompat;     \/* incompatible feature set *\/$/;"	m	struct:journal_superblock_s
+s_feature_ro_compat	journal.h	/^    __be32  s_feature_ro_compat;    \/* readonly-compatible feature set *\/$/;"	m	struct:journal_superblock_s
+s_first	journal.h	/^    __be32  s_first;                \/* first block of log information *\/$/;"	m	struct:journal_superblock_s
+s_header	journal.h	/^    journal_header_t s_header;$/;"	m	struct:journal_superblock_s
+s_max_trans_data	journal.h	/^    __be32  s_max_trans_data;       \/* Limit of data blocks per trans. *\/$/;"	m	struct:journal_superblock_s
+s_max_transaction	journal.h	/^    __be32  s_max_transaction;      \/* Limit of journal blocks per trans.*\/$/;"	m	struct:journal_superblock_s
+s_maxlen	journal.h	/^    __be32  s_maxlen;               \/* total blocks in journal file *\/$/;"	m	struct:journal_superblock_s
+s_nr_users	journal.h	/^    __be32  s_nr_users;             \/* Nr of filesystems sharing log *\/$/;"	m	struct:journal_superblock_s
+s_padding	journal.h	/^    __u32   s_padding[44];$/;"	m	struct:journal_superblock_s
+s_sequence	journal.h	/^    __be32  s_sequence;             \/* first commit ID expected in log *\/$/;"	m	struct:journal_superblock_s
+s_start	journal.h	/^    __be32  s_start;                \/* blocknr of start of log *\/$/;"	m	struct:journal_superblock_s
+s_users	journal.h	/^    __u8    s_users[16*48];         \/* ids of all fs'es sharing the log *\/$/;"	m	struct:journal_superblock_s
+s_uuid	journal.h	/^    __u8    s_uuid[16];             \/* 128-bit uuid for journal *\/$/;"	m	struct:journal_superblock_s
+search_file	search.c	/^int search_file ( int fd, struct ext3_super_block *sb, __u32 i_num, $/;"	f
+search_file_rec	search.c	/^int search_file_rec ( int fd, struct ext3_super_block *sb,$/;"	f
+search_file_rec_block	search.c	/^int search_file_rec_block ( int fd, struct ext3_super_block *sb, $/;"	f
+search_first_free_block	search.c	/^__u32 search_first_free_block(int fd, const struct ext3_super_block *sb,$/;"	f
+search_first_free_inode	search.c	/^__u32 search_first_free_inode(int fd, const struct ext3_super_block *sb,char * inodebitmap)$/;"	f
+search_inode	search.c	/^int search_inode ( int fd, struct ext3_super_block *sb, __u32 i_num,$/;"	f
+search_inode_rec	search.c	/^int search_inode_rec ( int fd, struct ext3_super_block *sb, __u32 i_num,$/;"	f
+search_inode_rec_block	search.c	/^int search_inode_rec_block ( int fd, struct ext3_super_block *sb, $/;"	f
+t_blocknr	journal.h	/^        __be32          t_blocknr;      \/* The on-disk block number *\/$/;"	m	struct:journal_block_tag_s
+t_flags	journal.h	/^        __be32          t_flags;        \/* See below *\/$/;"	m	struct:journal_block_tag_s
+view	path.c	/^void view(const struct path_filo *p)$/;"	f

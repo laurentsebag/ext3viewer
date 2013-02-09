@@ -1,0 +1,55 @@
++-----------------------------------------------------------------------------+
+|                                 ext3Viewer                                  |
++-----------------------------------------------------------------------------+
+
+
+By :Laurent Sebag <laurentsebag@free.fr>
+    Nathan Periana <nathan.periana@yahoo.com>
+
+Version 1.0
+Last update: March 20, 2007
+
+Go to http://ext3viewer.free.fr to find the latest releases.
+Send all ext3Viewer-related subjects to <ext3viewer@free.fr>
+
+1-About ext3viewer
+ext3viewer is a low-level ext3 explorer.
+It lets you study all the ext3 structures and prints them in a more 
+ user-friendly form.
+_______________________________________________________________________________
+2-Compiling ext3viewer
+Type "make" in the ext3viewer/ directory. 
+To get the images for the ext3viewer GUI (gext3viewer) and install everything 
+ to the pathes specified in the makefile, type "make install".
+Should you lack the necessary rights to install in the default directories,
+ edit the INSTALL_DIR variable in the makefile.
+More details in INSTALL .
+_______________________________________________________________________________
+3-Using ext3viewer
+ext3viewer is the console program, and gext3viewer is the graphical interface.
+
+use gext3viewer without arguments.
+
+Try using ext3Viewer filesystem -stats to get the superblock information.
+ext3Viewer -help will give you a short list of the available options.
+More details in the man page: man 1 ext3Viewer
+_______________________________________________________________________________
+4-Project organisation
+Current directory is the ext3viewer folder:
+./        : contains makefile, README, INSTALL files, test filesystem image,
+	    and executable if compiled but not installed.
+./doc/    : contains user and developer documentation, and LaTeX sources.
+./man/    : contains manpages.
+./src/    : contains source code and internal makefile for the console mode.
+./src/gui : contains source code, images,
+	    and internal makefile for the graphical mode.
+_______________________________________________________________________________
+5-Libraries and versions needed
+This project requires and is known to work with:
+* GTK+ developement headers (at least version 2.0) and library
+   (at least version 2.6)
+* /usr/include/linux/ext3_fs.h
+* Linux (at least version 2.4.18)
+
+
+

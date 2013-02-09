@@ -1,0 +1,168 @@
+\documentclass[a4paper,oneside,10pt,final]{report}
+%\documentclass[a4paper,oneside,10pt,draft]{report}
+% Options possibles : 10pt, 11pt, 12pt (taille de la fonte)
+%                     oneside, twoside (recto simple, recto-verso)
+%                     draft, final (stade de développement)
+
+\usepackage[latin1]{inputenc} % LaTeX, comprends les accents !
+%\usepackage[T1]{fontenc}      % Police contenant les caractères français
+%\usepackage{geometry}         % Définir les marges
+\usepackage[francais]{babel}  % liste de langues, la dernière étant la langue
+                              % principale
+\usepackage{makeidx}
+%\usepackage{showidx} %affiche les mots indexes en haut a droite
+\usepackage{graphicx}
+% Les paramètres du titre : titre, auteur, date
+\title{ext3Viewer -- Documentation Utilisateur}
+\author{Laurent Sebag \and Nathan Periana}
+% \date{}
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%%%
+
+
+\maketitle                  % Faire un titre utilisant les données
+                            % passées à \title, \author et \date
+
+%Voici une liste des balises pour organiser le texte
+  %\part{...}
+  %\chapter{...}
+  %\section{...}
+  %\subsection{Sous section 1}
+  %\subsubsection{Sous sous section 1}
+  %\paragraph{paragraphe}
+  %\subparagraph{sous paragraphe}
+
+
+%\setcounter{page}{3}
+\tableofcontents            % Table des matières
+%\listoffigures              % Table des figures
+%\listoftables               % Liste des tableaux
+
+\chapter{Introduction}
+Ext3Viewer est un logiciel qui permet de naviguer à travers le système de fichier ext3 et d'afficher des information de bas niveau. Il permet d'afficher toutes les structures qui composent les fichiers, dossiers, les peripheriques et bien plus encore.
+\\
+
+Cette documentation est conçue pour les futurs utilisateurs de ext3Viewer et de son interface graphique. Il y sera abordé l'installation ainsi que l'utilisation des deux logiciels.
+
+\chapter{Installation}
+Tout d'abord, assurez vous de posséder la dernière version d'ext3Viewer. Elle est disponible sur le site internet \verb|http://ext3viewer.free.fr|.
+
+\section{Logiciels nécessaires}
+Voici une liste de logiciels qui sont nécessaires à l'installation d'ext3Viewer:
+\begin{itemize}
+
+\item gcc
+\item make
+\item pkg-config
+\item gtk\verb|+-|2.0 version 2.6 ou supérieure
+
+\end{itemize}
+
+\section{Comment installer ?}
+
+\begin{enumerate}
+\item
+Décompressez l'archive ext3Viewer-X.X.tar.bz2 : \\
+    \verb| %tar xjf ext3Viewer-X.X.tar.bz2|\\
+\item
+Déplacez vous a la racine du dossier ext3Viewer : \\
+    \verb| %cd ext3Viewer|\\
+\item
+Compilez le programme\footnote{Il est possible de personnaliser l'installation (groupes, permissions, répertoires). Pour cela veuillez lire le fichier INSTALL.} : \\
+	   \verb| %make|\\
+\item
+Installez le programme : \\
+	    \verb| %make install| \textit{en tant qu'utilisateur root}\\
+\item
+Vous pouvez maintenant lancer le mode console ou l'interface graphique : 
+\\
+    \verb| %ext3Viewer| ou \verb|%gext3Viewer|\\
+\end{enumerate}
+
+\chapter{Documentation d'ext3Viewer GUI}
+\begin{figure}[!ht]
+\center
+\includegraphics[scale=1.00]{ext3ViewerGUI}
+\caption{aperçu de l'application graphique}
+\end{figure}
+\section{Ouvrir un fichier}
+Avant toute opération possible, vous devez ouvrir un système de fichier. Il est conseillé que celui-ci soit démonté.\\
+\\
+Cliquez dans le menu(1) File ---$>$ Open, puis choisissez une image ext3 ou bien une partition du type /dev/hdXX si vous êtes root.
+\section{L'arbre de navigation}
+Une fois un fichier ouvert, la partie (3) de l'interface est remplie par un arbre
+représentant les fichiers et dossiers sur ce système de fichier.\\
+\\
+Vous pouvez naviguer à travers les dossiers en double cliquant dessus. Il est également possible de cliquer avec le boutton droit de la souris pour accéder à certaines fonctions.\\
+\\
+\textsl{Remarque}: Les fichiers et dossiers ne sont pas classés par ordre alphabétiques. Ils sont disposés comme ils le sont physiquement sur le disque.
+\section{Les fonctionalités}
+\subsection*{Affichage du superblock}
+Pour afficher les informations du superblock, cliquez dans le menu (1)\\
+       Tools ---$>$ Superblock ---$>$ Show superblock Structure\\
+       \\
+Le contenu du superblock va alors s'afficher dans la partie centrale (4).
+
+\subsection*{Affichage du group descriptor}
+Pour afficher les information à propos des group descriptors, cliquez dans le 
+menu\\
+    Tools ---$>$ Group Descriptors ---$>$ Show the group descriptors 
+
+\subsection*{Affichage des bitmaps}
+Pour afficher une inode bitmap propre à un groupe de blocks, cliquez dans le
+menu\\
+    Tools ---$>$ Bitmaps ---$>$ Show the inode/block bitmap\\
+    \\
+    Un pop-pup va apparaître pour demander le numero de groupe. Entrez un
+    numéro de groupe et validez. La bitmap sera alors affichée dans la partie
+    centrale (4).
+
+\subsection*{Trouver le prochain inode/block libre}
+Cliquez dans le menu\\
+	  Tools ---$>$ Bitmaps ---$>$ Find the next free inode/block
+
+\subsection*{Afficher la structure d'un inode}
+Sélectionnez dans l'arbre (3) un inode puis cliquez dans le menu\\
+Tools ---$>$ Inode ---$>$ Print the selected inode's structure\\
+      \\
+      Les détails sur l'inode sélectionné s'afficheron dans la partie centrale (4).
+
+\subsection*{Afficher le contenu d'un block}
+L'affichage du contenu d'un block est utile pour afficher le contenu d'un 
+fichier. Vous devez d'abord regarder le contenu d'un inode : vous y trouvez les blocks alloués. Puis cliquez dans le menu\\
+    Tools ---$>$ Block ---$>$ Show a block's contents\\
+    Un pop-up apparaîtra alors pour demander le numéro du block. Entrez un 
+    numéro puis validez.\\
+      \\
+Le contenu du block s'affichera alors dans la partie centrale(4) en héxadécimal.
+Nous n'affichons pas le contenu en directement car il pourrait y avoir des 
+caratères non affichables. Cependant en plus de l'affichage en héxadécimal, les caractères ascii sont affichés.
+
+\subsection*{Chercher un fichier/inode}
+Vous pouvez rechercher un fichier soit par son numéro d'inode soit par une expression régulière.\\
+       \\
+       Cliquez dans la partie (2) sur la liste pour choisir le type de 
+       recherche. Puis entrez le numéro ou la chaîne. Ensuite cliquez sur
+       le bouton \textit{find it!}. La recherche peut prendre du temps
+       suivant la taille du système de fichier.
+
+
+\subsection*{Afficher le contenu du journal}
+Pour afficher le journal superblock et le contenu du journal, cliquez dans le menu\\
+       Tools ---$>$ Journal ---$>$ Dump the internal journal\\
+       \\
+\textsl{Remarque}: Il n'est possible d'afficher que le journal interne au 
+système de fichier.
+
+
+\chapter{Documentation d'ext3Viewer}
+
+
+
+\end{document}
+

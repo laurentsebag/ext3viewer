@@ -1,0 +1,743 @@
+\documentclass[a4paper,oneside,10pt,final]{report} 
+%\documentclass[a4paper,twoside,10pt,final]{report}
+% Options possibles : 10pt, 11pt, 12pt (taille de la fonte)
+%                     oneside, twoside (recto simple, recto-verso)
+%                     draft, final (stade de développement)
+
+\usepackage[latin1]{inputenc} % LaTeX, comprends les accents !
+%\usepackage[T1]{fontenc}      % Police contenant les caractères français
+%\usepackage{geometry}         % Définir les marges
+\usepackage[francais]{babel}  % liste de langues, la dernière étant la langue
+                              % principale
+\usepackage{makeidx}
+%\usepackage{showidx} %affiche les mots indexes en haut a droite
+
+% Les paramètres du titre : titre, auteur, date
+\title{ext3Viewer -- Documentation développeur}
+\author{Laurent Sebag \and Nathan Periana}
+% \date{}
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%%%%%%%%%%%%%%%%%
+
+
+\maketitle                  % Faire un titre utilisant les données
+                            % passées à \title, \author et \date
+
+%Voici une liste des balises pour organiser le texte
+  %\part{...}
+  %\chapter{...}
+  %\section{...}
+  %\subsection{Sous section 1}
+  %\subsubsection{Sous sous section 1}
+  %\paragraph{paragraphe}
+  %\subparagraph{sous paragraphe}
+
+
+
+\begin{abstract}             % Résumé de l'article
+Cette documentation a pour but de faciliter la reprise de code par un autre 
+programmeur afin qu'il puisse aisément comprendre le programme. Nous allons y 
+expliquer l'accès aux structures du système de fichier ainsi que l'organisation
+mise en place dans notre programme.
+
+   % TESTS sur la mise en valeur d'un mot
+   %Ceci est un \emph{mot} utilisé avec emphase.
+   %Voilà un \textit{mot} en italique.Et voici un \textsl{mot} penché.
+   %\emph{Cette phrase utilise emphase et ce \emph{mot} aussi}
+
+\end{abstract}
+
+\setcounter{page}{3} 
+\tableofcontents            % Table des matières
+%\listoffigures              % Table des figures
+%\listoftables               % Liste des tableaux
+
+\chapter*{Avant-propos}
+Pour une meilleure lisibilité, définissons quelques conventions pour ce document. Tout d'abord, le vocabulaire technique propre au système de fichier sera 
+écrit en Anglais, pour la cohérence avec le code. De plus, chaque mot emprunté
+au vocabulaire du système de fichier ext3 sera mis en valeur.
+
+Nous écrirons donc le \emph{superblock}, et non le \emph{superblock}. De même les champs des structures seront écrites en gras, exemple:
+\textsf{ext3\_super\_block}, \textsf{ext3\_inode} \ldots
+
+\part{Les structures du système de fichier ext3}      % Commencer une partie...
+
+\chapter{Accès au structures}      % Commencer un chapitre
+Afin de réaliser le projet ext3Viewer, nous avions besoin d'accéder aux
+structures \textsf{ext3}. Cependant il n'existe pas de fonctions dans 
+\textsf{LibC} permettant de lire les ``briques'' du système de fichier. Il 
+fallait donc construire nos propres fonctions de lecture. Chaque fonction 
+fait un calcul pour se positionner au bon endroit sur la partition, puis lit les données.\footnote{
+on se positionne avec \textsf{lseek()} ; la lecture s'effectue simplement avec
+la fonction \textsf{read()} 
+}
+
+\section{Lire le \emph{superblock}}            % Commencer une section, etc.
+\index{superblock}
+Lire le \emph{superblock} est la première chose à faire lorsque l'on veut
+explorer une partition. On y trouve des informations propres à la partition
+comme la taille d'un \emph{block}. Pour le lire, rien de plus simple : on se
+déplace de 1024 octets correspondant à la taille du \emph{boot sector} puis on
+remplit une structure \textsf{struct ext3\_super\_block} de taille sizeof(struct
+ext3\_super\_block).
+
+\section{Lire un \emph{group descriptor}}
+\index{group descriptor}
+L'emplacement du \emph{group descriptor} \textsf{ext3\_group\_desc suit la 
+politique} suivante : il se trouve après le \emph{boot sector} (le \emph{boot
+sector} n'est pas utilisable par ext3, c'est un espace réservé), et après le 
+\emph{superblock}\footnote{le \emph{superblock} est toujours situé
+après le 1\up{er}~Ko occupé par le \emph{boot sector}}, cependant le décalage 
+nécessaire pour atteindre le \emph{group descriptor} est variable. En effet on
+stocke toujours le \emph{superblock} sur la taille d'un \emph{block} (1, 2, ou 4~Ko) et le 
+\emph{boot sector} est sur 1~Ko. Si la taille d'un \emph{block} est supérieure à 
+1~Ko, on stocke le \emph{boot sector} et le \emph{superblock} dans un même 
+\emph{block}.
+
+Pour lire le \emph{group descriptor}, on utilise le champ 
+\textsf{s\_first\_data\_block} qui applique la politique expliquée ci dessus. 
+Ce champ indique un nombre $n$. Il faut sauter $(n+1)$ \emph{blocks} pour lire le 
+\emph{group descriptor}.
+
+Exemples:
+\begin{itemize}
+\item{
+si un \emph{block} = 1024~oct, alors le descripteur de groupe est situé après les
+2048~oct occupés par le \emph{boot sector} et le \emph{superblock}.
+}
+\item{
+si un \emph{block} = 4096~oct, alors le \emph{group descriptor} est situé après 
+les 4096~oct partiellement occupés par le \emph{boot sector} et le 
+\emph{superblock}. Il y a en fait un espace vide entre le 
+\emph{superblock} et les \emph{group descriptors}.
+}
+\end{itemize}
+
+
+\section{Lire une \emph{inode}}
+\index{inode}
+On lit le \emph{group descriptor}, ce \emph{group descriptor} contient un champ
+\textsf{bg\_inode\_ta\-ble} qui contient le numero de \emph{block} o\`u
+ commence l'\emph{inode table}. Il nous reste plus qu'à faire un \emph{lseek} de
+\begin{displaymath}
+\begin{array}{ll}
+  &  numero~de~block \times taille~d'un~block\\ 
++ &  numero~de~l'inode~dans~le~groupe \times taille~d'un~inode.
+\end{array}
+\end{displaymath}
+Evidemment, tous les \emph{inodes} ne se trouvent pas sur la même 
+\emph{inode table}. Il faut calculer sur quel groupe se trouve notre \emph{inode} avant de le lire. Pour cela nous disposons d'un champs dans le \emph{superblock} qui donne le nombre d'\emph{inodes} par groupes.
+
+\section{Lire une \emph{inode bitmap}}
+\index{inode bitmap}
+Après avoir lu le \emph{group descriptor} d'un groupe donné, il est facile de lire une \emph{inode bitmap}. En effet il existe un champ \textsf{bg\_inode\_bitmap} dans la structure \textsf{ext3\_group\_desc} qui contient le numéro de \emph{block} où se situe cette \emph{inode bitmap}. Il suffit de se placer à ce numéro de \emph{block} et de lire l'\emph{inode bitmap}.
+
+\section{Lire une \emph{block bitmap}}
+\index{block bitmap}
+La lecture de la \emph{block bitmap} s'effectue de la même façon que la lecture d'une \emph{inode bitmap}. On regarde le champ \textsf{bg\_block\_bitmap} de la structure \textsf{ext3\_group\_desc} et on effectue une lecture avec \textsf{read()}.
+
+\section{Allocation des \emph{blocks} pour un \emph{inode} }%et lecture}
+\index{allocation des \emph{blocks}}
+Les \emph{blocks} sont les briques qui forment les données d'un fichier. Pour chaque 
+\emph{inode}, on alloue un certain nombre de \emph{blocks}, ils sont pointés par les
+éléments du tableau \textsf{i\_block[EXT3\_N\_BLOCKS]}. Ce tableau est composé
+de 15 éléments. On pourrait stocker les données directement dans ce tableau, 
+cependant si on fait le calcul, on ne peut que stocker dans un fichier $15 
+\times taille~d'un~block = 60~Ko$\footnote{si on un utilise des \emph{blocks} de 4~Ko}, en
+appliquant cette méthode. En fait, certains \emph{blocks} vont servir de table de \emph{blocks}
+pour pouvoir adresser plus de place pour un \emph{inode}.\\
+\textit{Dans les exemples suivants, on utilise un \emph{block} de taille 4096~oct.}
+%\begin{figure}[h]
+%  \begin{center}
+%	faire le dessin ici
+%  \end{center}
+%\caption{Graphe représentant l'allocation des inodes}
+%\end{figure}
+
+
+\subsection{Blocs directs}
+\index{\emph{block} direct}
+Les éléments du tableau \textsf{i\_block[]} de 0 à 
+\textsf{EXT3\_NDIR\_BLOCKS~$-~1$} sont des pointeurs vers les \emph{blocks} de données.
+Pour lire les données associées au fichier, on lit simplement un \emph{block} $n$ en
+sautant \textsf{i\_block[$n$]}$~\times{}$~(taille d'un \emph{block})~octets.
+\subsection{Blocs indirects}
+\index{\emph{block} indirect}
+\`{A} partir du \textsf{EXT3\_IND\_BLOCK}~-~ième champ du tableau
+\textsf{i\_block[]}, on ne stocke plus les données directement à l'emplacement
+\textsf{i\_block[]}, on indexe. On considère le champ
+\textsf{i\_block[EXT3\_IND\_BLOCK]} comme une table de pointeurs. Pour lire les
+données on lit sur \textsf{i\_block[EXT3\_IND\_BLOCK]} 4~oct par 4~oct les
+adresses des \emph{blocks} de données.
+
+On peut donc stocker grâce à un \emph{block} indirect\footnote{considérons qu'un block fait 4096~octets}:
+\begin{equation}
+	\frac{taille~d'un~block}{4~oct}~\times~taille~d'un~block=4096~Ko
+\end{equation}
+
+
+ 
+% \setlength{\unitlength}{0.5mm}
+% \begin{picture}(100,200)
+% 
+% \newsavebox{\lblock}
+% \savebox{\lblock}(10,7)[tl]{
+%   \multiput(0,0)(0,7){2}
+%   {\line(1,0){10}}
+%   \multiput(0,0)(10,0){2}
+%   {\line(0,1){7}}
+% }
+% 
+% \newsavebox{\iblock}
+% \savebox{\iblock}(20,15)[bl]{
+%   \multiput(0,0)(0,15){2}
+%   {\line(1,0){20}}
+%   \multiput(0,0)(20,0){2}
+%   {\line(0,1){15}}
+% }
+% \multiput(0,130)(0,8){6}
+%   {\put(50,1){\usebox{\lblock}}}
+% \multiput(0,100)(0,20){3}
+%   {\put(0,1){\usebox{\iblock}}}
+% \multiput(0,10)(0,20){4}
+%   {\put(0,1){\usebox{\iblock}}}
+% 
+% 
+% \end{picture}
+
+
+\subsection{Blocs indirects doubles}
+\index{\emph{block} indirect double}
+Pour lire les \emph{blocks} indirects doubles, le principe est le même que pour les \emph{blocks}
+indirects. Cette fois-ci on considère \textsf{i\_block[EXT3\_DIND\_BLOCK]} comme
+une table de table de \emph{blocks} de données.
+
+On peut donc stocker grâce à un \emph{block} indirect double:
+\begin{equation}
+	\bigg(\frac{taille~d'un~block}{4~oct}\bigg)^{2}
+~\times~taille~d'un~block=4096~Mo
+\end{equation}
+
+\subsection{Blocs indirects triples}
+\index{\emph{block} indirect triple}
+La lecture des \emph{blocks} indirects triples se fait comme suit : on lit
+\textsf{i\_block[EXT3 \_TIND\_BLOCK]} 4~oct par 4~oct pour obtenir l'adresse
+d'une table de tables qui contient les données. Puis on lit cette seconde table
+pour avoir les tables de \emph{blocks} de données. En lisant cette dernière table on
+connait l'adresse des données et on peut les lire. 
+%14 \emph{block} triplement indirect
+
+On peut donc stocker grâce à un \emph{block} indirect triple:
+\begin{equation}
+	\bigg(\frac{taille~d'un~block}{4~oct}\bigg)^{3}
+~\times~taille~d'un~block=4096~Go
+\end{equation}\\
+\textbf{CCL:} Calculons la taille maximum d'un fichier
+\index{taille maximum d'un fichier}
+\begin{equation}
+\begin{array}{rl}
+taille~max~fichier= & blocks~directs+(1.2)+(1.3)+(1.4)\\ 
+= & 4096 \times \Bigg( 12 + \bigg(\frac{4096}{4}\bigg) +
+\bigg(\frac{4096}{4}\bigg)^{2} + \bigg(\frac{4096}{4}\bigg)^{3}\Bigg)\\
+\approx & 4~To
+\end{array}
+\end{equation}
+
+
+\section{Lire un dossier}
+\index{dir entry}
+Sous ext3, un dossier est représenté par un inode qui contient (\emph{blocks} alloués) un ensemble de \emph{dir entries}. On doit tester le type de fichier de l'\emph{inode} grâce au champ \textsf{i\_mode} de l'\emph{inode}. Puis après avoir vérifié qu'il s'agit bien d'un dossier, on lit les \emph{blocks} alloués à l'\emph{inode} pour remplir une structure \textsf{ext3\_dir\_entry}. Dans cette \emph{dir entry}, on a plusieurs informations à propos du premier fichier contenu dans le répertoire. Parmi celles-ci, on trouve \textsf{rec\_len}, qui représente la taille d'un enregistrement d'un fichier dans le répertoire.
+
+On aurait pu lire les \emph{blocks} de données $n$~oct par $n$~oct, avec $n=$~\textsf{sizeof( struct ext3\_dir\_entry\_2 )}. Cependant comme il peut y avoir des espaces vides dans les \emph{blocks}\footnote{à cause des suppressions de fichiers}, on n'applique pas cette méthode. Le principe consiste à lire par taille de $n$~oct mais on se déplace de \textsf{rec\_len}~oct entre chaque lecture de \emph{directory entry}. \textsf{rec\_len} pointe toujours vers le prochain \textsf{ext3\_dir\_entry}. On se déplace dans les \emph{blocks} de données d'un répertoire comme on se déplacerait dans une liste chainée. Il faut néanmoins faire attention que le décalage effectué pour lire les \textsf{ext3\_dir\_entry\_2} ne soit pas supérieur à la taille d'un \emph{block}. Dans ce cas il faut continuer la lecture sur le \emph{block} suivant qui n'est pas forcément le \emph{block} suivant sur le disque.
+
+%\begin{figure}[h]
+%	\begin{center}
+%	\textit{faire un petit schéma qui montre comment les dir entries sont
+%reliées entre elles}
+%	\end{center}
+%\caption{Liens entre les \emph{directory entries}}
+%\end{figure}
+
+\section{Lire un \emph{symlink}}
+\index{symlink}
+Le \emph{symlink} est un lien vers un fichier. C'est en fait un \emph{inode} qui a pour données une chaine de caractères : le chemin vers le fichier pointé. Cependant pour économiser de l'espace, ext3 n'alloue pas toujours de \emph{blocks} pour un \emph{symlink}. La règle est la suivante : si la taille du lien est inférieure à 60 octets, alors on peut lire \textsf{ex3\_inode.i\_block} comme une chaine de caractères. Sinon, on parcours l'arbre des \emph{blocks} alloués à l'\emph{inode} et on obtient la chaine de caractères. 
+
+\section{Lecture du journal}
+\index{journal}
+La journalisation qui est utilisée avec le système de fichier ext3 n'est pas propre à ext3. En effet, c'est un mécanisme qui peut être utilisé en théorie par n'importe quel système de fichier. Le système de journalisation s'appelle jbd. 
+
+L'etude du journal fut l'étape la plus dure de notre projet car nous manquions de documentation technique sur le journal. Il existe une API qui permet de manipuler le journal, cependant celle-ci a un niveau d'abstraction trop haut, qui ne permet pas d'accéder aux données souhaitées.
+Nous avons tout de même réussi à extraire quelques données du journal interne au système de fichier.\\
+\\
+Remarques :
+
+Il est important de noter que toutes le structures du journal sont en big endian, il est donc necessaire pour afficher le contenu d'une structure de transformer l'ordre des octets sur la machine locale. Pour cela il existe des fonctions comme \textsf{be32\_to\_cpu()}.
+
+Comme dans ext3, il existe aussi une notion de \emph{block} dans le journal, d'ailleur on trouve un champ \emph{block size} dans le \emph{superblock} du journal. Néanmoins cette taille de \emph{block} semble coïncider avec la taille d'un \emph{block} du système de fichier. Il semblerait que ce champ soit fourni pour des raisons de compatibilités avec les autres systèmes de fichiers.
+
+Tout d'abord présentons les différentes structures de jbd définies dans \textsf{/usr/\-include/linux/jbd.h}.
+
+\subsection{Le \emph{journal superblock}}
+\index{journal superblock}
+Tout comme le système de fichier, le journal contient des informations
+générales qui sont stockées dans un \emph{superblock}. Cette structure se
+situe sur les \emph{blocks} alloués à l'inode du journal. L'inode du journal
+est defini dans le champ \textsf{s\_journal\_\-inum} du \emph{superblock} du
+système de fichier (en général, il s'agit de l'\emph{inode} 8). Le premier \emph{block} alloué à cet \emph{inode} contient le \emph{journal superblock}.
+
+Parmis les champs utiles à la lecture du \emph{journal superblock} il y a \textsf{s\_header.\-h\_magic} qui permet de tester s'il s'agit bien d'un \emph{superblock}  valide. Le champ \textsf{s\_start} permet de connaître l'état du journal : s'il vaut 0, alors le journal est vide. Sinon, le journal contient des entrées, et se termine lorsque les compteurs \textsf{t\_blocknr} ne sont plus consécutifs entre deux \emph{blocks}.
+
+
+\subsection{Les \emph{journal headers}}
+\index{journal header}
+Après le \emph{block} contenant le journal, on trouve des \emph{blocks} de descrtiption d'une action dans le journal. On peut vérifier la validité d'un \emph{block} grâce au \emph{magic number}. Il existe cinq différents types de \emph{blocks} définis dans l'en-tête jbd.h. Un \emph{block} \textsf{JFS\_DESCRIPTOR\_BLOCK} prévient du début de la description d'une transaction. La transaction se termine par un \textsf{JFS\_COMMIT\_BLOCK}. Après chaque \emph{block} de description, on trouve une liste de \emph{journal block tags}.
+
+\subsection{Les \emph{journal block tags}}
+Une transaction semble pouvoir concerner plusieurs \emph{blocks} du système de fichier. La liste des \emph{journal block tags} donne une correspondance entre un numéro de \emph{block} et un \emph{flag} qui definit l'action. On indique la fin de cette liste par un \emph{flag} \textsf{JFS\_FLAG\_LAST\_TAG}.
+
+
+\chapter{Interprétation des champs des structures ext3}
+
+\section{\textsf{ext3\_super\_block}}  
+Il contient des informations administratives importantes, portant sur le sys\-tème de fichiers, pour le lancement du système d'exploitation.
+Il existe des copies du \emph{superblock} à plusieurs endroits sur un système de fichier.
+Il est représenté par la structure ext3\_super\_block, sur au plus un block.
+\\
+\\
+Explication des champs du superblock:
+
+\_\_u32s\_inodes\_count;	\\
+Nombre total d'inodes\\
+\_\_u32ss\_blocks\_count;\\
+Nombre de blocks\\
+\_\_u32ss\_r\_blocks\_count;\\
+Nombre de blocks réservés\\
+\_\_u32ss\_free\_blocks\_count;\\
+Nombre de blocks libres\\
+\_\_u32ss\_free\_inodes\_count;\\
+Nombre d'inodes libres\\
+\_\_u32ss\_first\_data\_block;\\
+Numéro du premier block contenant les données.\\
+\_\_u32ss\_log\_block\_size;\\
+Taille des blocks, de la forme: $1024*2^{log\_block\_size}$. Donc si la valeur est 0, la taille d'un \emph{block} sera de $1024*2^{0}=1024$ octets. \\
+\_\_s32s\_log\_frag\_size;\\
+Taille des fragments.\\
+\_\_u32ss\_blocks\_per\_group;\\
+Nombre de blocks par groupe\\
+\_\_u32ss\_frags\_per\_group;\\
+Nombre de fragments par groupe\\
+\_\_u32ss\_inodes\_per\_group;\\
+Nombre d'inodes par groupe\\
+\_\_u32ss\_mtime;\\
+Timestamp de la dernière opération de montage. Le timestamp est au format UNIX (c'est à dire, le nombre de secondes écoulées depuis le 1er Janvier 1970, à 0h00mn00sec; pour en savoir plus ,regarder man 3 ctime .)\\
+\_\_u32ss\_wtime;\\
+Timestamp de la dernière opération d'écriture\\
+\_\_u16s\_mnt\_count;\\
+Compteur conservant le nombre de montages;\\
+\_\_s16s\_max\_mnt\_count;\\
+Nombre de montages maximum autorisé avant de vérifier le système de fichier\\
+\_\_u16ss\_magic;\\
+Nombre magique, égal à 0xef53 pour ext2/3.\\
+\_\_u16ss\_state;\\
+Flag de statut, indiquant si le système de fichier est propre ou non. La fonction  void print\_state(\_\_u16 s\_state); permet de traduire la valeur: elle est égale à 0 si le système de fichier n'a pas été démonté correctement; 1 si il est propre, 2 si il contient des erreurs, 4 si des inodes orphelins sont en train d'être récupérés.\\
+\_\_u16ss\_errors;\\
+Indique quel est le comportement qui doit être utilisé en cas de détection d'erreurs. Si la valeur est 1, on continue l'execution; 2, on remonte le système de fichiers en lecture seule; 3, on déclenche un kernel panic.\\
+\_\_u16ss\_minor\_rev\_level;\\
+Version minimum du système de fichier.\\
+\_\_u32ss\_lastcheck;\\
+Timestamp de la dernière vérification.\\
+\_\_u32ss\_checkinterval;\\
+Durée maximale entre les vérifications.\\
+\_\_u32ss\_creator\_os;\\
+OS créateur.\\
+\_\_u32ss\_rev\_level;\\
+Version du système de fichiers.\\
+\_\_u16ss\_def\_resuid;\\
+UID par défaut pour les \emph{blocks} réservés. Certains blocks sont réservés pour le superutilisateur; on peut par contre modifier l'UID auquel ils seront affectés par défaut.\\
+\_\_u16ss\_def\_resgid;\\
+GID par défaut pour les \emph{blocks} réservés.\\
+Ces champs sont seulement valables pour les superblocks de ext2/3 version 2 (avec taille d'inode dynamique).\\
+\_\_u32ss\_first\_ino;\\
+Numéro du premier inode libre.\\
+\_\_u16   s\_inode\_size;\\
+Taille des inodes.\\
+\_\_u16ss\_block\_group\_nr;\\
+Numéro de block du superblock lu .\\
+\_\_u32ss\_feature\_compat;\\
+Carte (bitmap) des fonctionnalités compatibles.\\
+Les cartes des fonctionnalités sont lisibles bit par bit (une position de bit correspond à une fonctionnalité: 0 signifie non supportée, 1 signifie supportée.)\\
+  0x0001 La partition supporte la préallocation pour les dossiers.\\
+  0x0002 La partition supporte les inodes magiques\\
+  0x0004 La partition supporte la journalisation.\\
+  0x0008 La partition supporte les attributs utilisateurs étendus.\\
+  0x0010 La partition supporte les inodes de taille variable.\\
+  0x0020 La partition est compatible avec la création d'index de dossier.\\
+\\
+\\
+  \_\_u32ss\_feature\_incompat;\\
+  Carte des fonctionnalités incompatibles\\
+  0x0001 La partition n'est pas compatible avec la compression 'transparente'.\\
+  0x0002 La partition n'est pas compatible avec les types de fichiers.\\
+  0x0004 La partition a besoin d'être réparée.\\
+  0x0008 La partition n'est pas compatible avec un journal externe.\\
+  0x0010 La partition n'est pas compatible avec les métadonnées des block groups.\\
+\\
+\\
+  \_\_u32ss\_feature\_ro\_compat;\\
+  Carte des fonctionnalités compatibles en lecture seule\\
+  Le système de fichier peut être lu sans problème, mais une écriture sur celui ci risquerait de le corrompre.\\
+  0x0001 La partition supporte en lecture seule les fichiers troués.\\
+  0x0002 La partition supporte en lecture seule les fichiers de grande taille.\\
+  0x0004 La partition supporte en lecture seule les arborescences de types B-Arbres\\
+  (Pour plus d'informations, voir http://fr.wikipedia.org/wiki/Arbre\_B)\\
+\\
+  \_\_u8s\_uuid[16];\\
+  uuid du le volume.\\
+  chars\_volume\_name[16];\\
+  Nom du volume.\\
+  charss\_last\_mounted[64];\\
+  Dossier dans lequel la partition a été montée pour la dernière fois.\\
+  \_\_u32ss\_algorithm\_usage\_bitmap;\\
+  Sert pour la compression 'transparente', c'est à dire la compression intégrée directement au système de fichier.\\
+  \_\_u8ss\_prealloc\_blocks;\\
+  Nombre de blocks à préallouer.\\
+  \_\_u8ss\_prealloc\_dir\_blocks;\\
+  Nombre de blocks à préallouer pour les dossiers.\\
+  \_\_u16ss\_padding1;\\
+  Non affiché, utilisé pour avoir un 'bon' nombre d'octets dans le superblock.\\
+  \_\_u8ss\_journal\_uuid[16];\\
+  uuid du superblock du journal.\\
+  \_\_u32ss\_journal\_inum;\\
+  Numéro d'inode du journal.\\
+  \_\_u32ss\_journal\_dev;\\
+  Numéro du périphérique sur lequel se trouve le journal.\\
+  \_\_u32ss\_last\_orphan;\\
+  Debut de la liste des inodes orphelins à effacer\\
+  \_\_u32ss\_hash\_seed[4];\\
+  Graine de hachage HTREE.\\
+\\
+  \_\_u8ss\_def\_hash\_version;\\
+  Version de hachage à utiliser par défaut.\\
+  \_\_u8ss\_reserved\_char\_pad;\\
+  \_\_u16ss\_reserved\_word\_pad;\\
+  Non affichés, servent à 'aligner' la structure du superblock.\\
+  \_\_u32ss\_default\_mount\_opts;\\
+  Options de montage par défaut.\\
+  Les options de montage par défaut sont également lisibles bit par bit (une position de bit correspond à une option: 0 signifie non activée, 1 signifie activée.)\\
+  0x0001 Affichage des informations de debug à chaque montage.\\
+  0x0002 Le groupe ID par défaut d'un nouveau fichier est celui du répertoure dans lequel il se trouve.\\
+  0x0004 Support pour les attributs étendus (xattr) sur les utilisateurs.\\
+  0x0008 Support des Access Control List (ACL).\\
+  0x0010 Désactivation du mode 32-bits pour les UIDs et les GIDs (rétro\-compa\-tibilité avec les anciens kernels).\\
+  0x0060 La journalisation est activée. Signature commune avec le mode writeback; si ni l'un ni l'autre des autres modes ne sont activés, cela signifie que le journal est en mode writeback.\\
+\\
+  0x0020 Le journal est utilisé en mode journalisation complète (données+infor\-ma\-tions administratives).\\
+  0x0040 Le journal est utilisé en mode ORDERED: similaire au mode writeback décrit ci dessous, mais le contenu des fichiers est écrit avant de journaliser les données administratives. C'est la valeur par défaut.\\
+  0x0060 Le journal est utilisé en mode WRITEBACK: Les données administratives (metadata) sont journalisées, tandis que le contenu du fichier ne l'est pas.\\
+  Pour plus de détails, voir la section concernant le journal.\\
+  \_\_u32ss\_first\_meta\_bg;\\
+  Premier block group pour les informations administratives.\\
+  \_\_u32ss\_reserved[190];\\
+  Non affiché, sert à finir de remplir le superblock.\\
+
+
+
+\section{\textsf{ext3\_group\_desc}}
+
+Le group descriptor contient des informations administratives sur le block group. Il est représenté par la structure ext3\_group\_desc.\\
+\\
+\\
+Explication des champs du group descriptor:\\
+\\
+  \_\_u32sbg\_block\_bitmap;    \\
+  Numéro de block du block bitmap\\
+  \_\_u32sbg\_inode\_bitmap;  \\
+  Numéro de block de l'inode bitmap\\
+  \_\_u32sbg\_inode\_table; \\
+  Numéro de block de la première inode table\\
+  \_\_u16sbg\_free\_blocks\_count; \\
+  Nombre de blocks libres dans le groupe\\
+  \_\_u16sbg\_free\_inodes\_count; \\
+  Nombre d'inodes libres dans le groupe\\
+  \_\_u16sbg\_used\_dirs\_count; \\
+  Nombre de dossiers dans le groupe\\
+  \_\_u16sbg\_pad;\\
+  \_\_u32sbg\_reserved[3];\\
+  Parties inutilisées de la structure.\\
+
+\section{\textsf{ext3\_inode}}
+
+L'inode contient des informations administratives liées à un "fichier" (fichier régulier, dossier, block device\ldots{}), comme sa taille, ses droits d'accès, les blocks qu'il occupe\ldots{}\\
+Elle est représentée sur le disque par la structure ext3\_inode.\\
+\\
+\\
+Explication des champs d'une inode:\\
+\\
+	\_\_u16	i\_mode;	\\
+"Mode" du fichier, indiquant son type (dossier, block device, fichier...), ses permissions, ses modes spéciaux(setuid, sticky bit)...\\
+\\
+	\_\_u16	i\_uid;\\
+16 bits de poids faible de l'ID du propriétaire de l'inode\\
+\\
+	\_\_u32	i\_size;		\\
+Taille du fichier\\
+\\
+	\_\_u32	i\_atime;\\
+	\_\_u32	i\_ctime;\\
+	\_\_u32	i\_mtime;\\
+	\_\_u32	i\_dtime;\\
+"Timestamps" d'accès, de création, de modification et de suppression.\\
+	\_\_u16	i\_gid;\\
+16 bits de poids faible du GID de l'inode\\
+\\
+	\_\_u16	i\_links\_count;\\
+Nombre de "liens durs" (hard links) pointant vers cette inode\\
+\\
+	\_\_u32	i\_blocks;\\
+Nombre de blocks occupés par le fichier\\
+\\
+	\_\_u32	i\_flags;	\\
+"Flags" du fichier, indiquant comment l'implémentation de ext3 doit gérer ce fichier (écriture en concaténation uniquement, suppression sécurisée...).\\
+0x00000001 Le fichier doit être effacé de façon sécurisée.\\
+0x00000002 Ce fichier peut être récupéré après effacement.\\
+0x00000004 Ce fichier est compressé.\\
+0x00000008 Ce fichier doit être mis à jour de façon synchrone.\\
+0x00000010 Ce fichier ne peut être modifié.\\
+0x00000020 L'écriture sur ce fichier se fait par ajout.\\
+0x00000040 Ce fichier ne doit pas être 'dumped' ou effacé.\\
+0x00000080 Le champ "dernier accès" (atime) de ce fichier ne doit pas être mis à jour.\\
+0x00000100 Le fichier est "sale" (en cours d'utilisation?)\\
+0x00000200 Ce fichier est composé d'un ou plusieurs 'clusters'/blocks compressés.\\
+0x00000400 Ce fichier ne doit pas être compressé.\\
+0x00000800 Ce fichier a subi une erreur lors de la compression.\\
+0x00001000 Dossier indexé par hachage.\\
+0x00002000 Dossier AFS.\\
+0x00004000 Les données de ce fichier doivent être journalisées.\\
+0x80000000 Valeur réservée pour la bibliothèque ext3.\\
+\\
+	union  osd1;\\
+Champ dépendant de l'OS\\
+\\
+	\_\_u32	i\_block[EXT3\_N\_BLOCKS];\\
+Pointeurs vers les blocks (numéro des blocks dans lesquels se trouvent le fichier, blocks directs, indirects, doublement indirects, triplement indirects)\\
+\\
+	\_\_u32	i\_generation;\\
+Version du fichier, sert pour NFS\\
+\\
+	\_\_u32	i\_file\_acl;\\
+\\
+Access Control List du fichier. Si le champ n'est pas à 0, il contient un pointeur (le numéro du block) vers le header de l'ACL associée au fichier.\\
+\\
+	\_\_u32	i\_dir\_acl;\\
+ACL du dossier. Si l'inode est réellement celle d'un dossier, le champ contient  pointeur (le numéro du block) vers le header de l'ACL associée au dossier. Sinon, il contient les 32 bits de poids faible de la taille du fichier.\\
+\\
+	\_\_u32	i\_faddr;	\\
+Adresse du fragment.\\
+	\\
+union osd2;\\
+pour linux:\\
+\_\_u8	l\_i\_frag;\\
+\_\_u8	l\_i\_fsize;\\
+\_\_u16	i\_pad1;\\
+\_\_u16	l\_i\_uid\_high;\\
+\_\_u16	l\_i\_gid\_high;\\
+\_\_u32	l\_i\_reserved2;\\
+pour hurd:
+\_\_u8	h\_i\_frag;\\
+\_\_u8	h\_i\_fsize;\\
+\_\_u16	h\_i\_mode\_high;\\
+\_\_u16	h\_i\_uid\_high;\\
+\_\_u16	h\_i\_gid\_high;\\
+\_\_u32	h\_i\_author;\\
+ pour masix:\\
+\_\_u8	m\_i\_frag;\\
+\_\_u8	m\_i\_fsize;\\
+\_\_u16	m\_pad1;\\
+\_\_u32	m\_i\_reserved2[2];\\
+Ces champs dépendent de l'OS:\\
+Numéro de fragment\\
+Taille du fragment\\
+Réservé/bits de poids fort du mode du fichier/Reservé\\
+Bits de poids fort de l'UID/Bits de poids fort de l'UID/Réservé\\
+Bits de poids fort du GID/Bits de poids fort du GID/Réservé\\
+Réservé/Auteur/Réservé\\
+
+
+\section{Les \emph{bitmaps}}
+
+L'inode bitmap indique, dans chaque block group, pour chaque inode, si elle est utilisé ou non.
+Il est représenté par un tableau de bits, sur au plus 1 block, dont la position est indiquée dans le group descriptor.
+\\
+
+Le data block bitmap indique, dans chaque block group, pour chaque block si il est utilisé ou non.
+Il est représenté par un tableau de bits, sur au plus 1 block, dont la position est indiquée dans le group descriptor.
+  
+\section{Le journal}
+
+Sous ext3, le journal est géré par le JBD (journaling block device); c'est une "couche" du noyau, actuellement utilisée par ext3 (et ext4), mais conçue pour être utilisable par d'autres systèmes de fichiers. Le JBD est donc "indépendant" de ext3.
+
+Le journal est constitué de plusieurs parties:
+Le superblock du journal, une structure qui reste en permanence, et conserve des informations sur le journal;
+Une zone dédiée à un "descripteur" du journal;
+Une "partie" constituée des "transactions" (copie des blocks de données administratives ou de données de fichiers, selon le mode de journalisation.)
+
+Le manque de documentation technique sur le JBD rend difficile son étude.
+
+\subsection{Les modes de journalisation}
+Mode de journalisation complète:\\
+  Les données et les métadonnées (données administratives) sont enregistrées par le journal avant d'être insérées dans le système de fichiers.
+    
+  Mode ORDERED:\\
+    Mode par défaut: les données dont écrites dans le système de fichiers avant de journaliser (inscrire dans le journal) les métadonnées.
+
+    Mode WRITEBACK:\\
+      Les données peuvent être écrites dans le système de fichier après l'inscription des métadonnées dans le journal; l'ordre des données n'est pas préservé.
+
+
+\part{Organisation de ext3Viewer}
+\setcounter{chapter}{0}
+\chapter{Organisation du code}
+
+\section{Organisation des fichiers sources}
+
+L'organisation des fichiers sources est décrite dans cette partie. Une description est faite de l'utilité de chaque fichier \emph{.c}. Les fonctions importantes de chaque fichier sont présentées.
+
+\subsection{filesystem.c}
+Ce fichier est composé de deux fonctions qui permettent l'ouverture et la fermeture du système de fichier. Elles permettent l'affichage d'un message d'erreur en cas de problème.
+\subsection{superblock.c}
+Dans ce fichier il y a les fonctions de lectures et d'affichage du superblock.
+\subsubsection{read\_superblock()}
+La lecture du \emph{superblock} nécessite quelques vérifications : le \textsf{magic number} doit correspondre à celui de ext3, et le système de fichier doit être démonté de préférence ( le flag EXT3\_FEATURE\_INCOMPAT\_RECOVER doit être à 0 ). Cette fonction vérifie ces conditions puis remplis la structure \textsf{ext3\_super\_block}.
+\subsubsection{read\_superblock\_backup()}
+Cette fonction permet de lire une copie du \emph{superblock} situé ailleur que dans le premier groupe. On doit donc lui preciser l'adresse du \emph{block} à lire.
+\subsubsection{print\_superblock()}
+Affiche tous les champs du \emph{superblock} en faisant la correspondance entre le contenu de chaque champs et leur signification.
+\subsubsection{print\_sb\_copy()}
+Cette fonction affiche la localisation des copies du \emph{superblock}. Il
+existe trois manières de sauvegarder les copies du \emph{superblock} selon les
+versions de ext3 : soit il n'y a pas de sauvegarde, soit il en existe une
+sauvegarde dans chaque groupe, soit il y en a une sauvegarde sur les groupes
+0, 1 et sur les puissances de 3, 5 et 7.
+
+
+
+\subsection{groups.c}
+Dans ce fichier se trouve des fonctions en rapport avec les groupes de \emph{blocks}.
+\subsubsection{read\_inodebitmap()}
+Rempli un tableau de char qui doit contenir l'\emph{inode bitmap}. Celui-ci doit être alloué dynamiquement avant l'appel de la fonction.
+\subsubsection{read\_datablockbitmap()}
+Idem pour le \emph{block bitmap}.
+\subsubsection{read\_group\_desc()}
+Si on lui passe le numéro d'un groupe, cette fonction remplit la structure \emph{ext3\_group\_desc}.
+\subsubsection{print\_groupdesc()}
+Affiche les champs de la structure \emph{ext3\_group\_desc} et leur significations.
+\subsubsection{print\_inodebitmap()}
+Affiche l'\emph{inode bitmap} d'un groupe, représentée par un tableau de bits qui indiquent si un \emph{inode} est utilisé ou non, 0 signifiant que l'\emph{inode} est libre et 1 signifiant qu'il est utilisé.
+
+
+\subsection{inode.c}
+
+\subsubsection{read\_inode() et print\_inode()}
+Fonctions de lecture et d'affichage d'un \emph{inode}.
+\subsubsection{print\_file()}
+Cette fonction permet d'afficher le contenu d'un fichier, soit en ascii, soit en hexadecimal. Pout lire les données associées à un \emph{inode}, la fonction récursive print\_blocks() est utilisée. On lit les 13 premiers \emph{blocks} associés à l'\emph{inode} directement. Puis pour les indices 12, 13, et 14 du tableau \textsf{i\_block[]}; on doit les considérer comme des tableaux de \emph{blocks} (\emph{blocks} indirects, doublement indirect et triplement indirect).
+\subsubsection{print\_symlink}
+Le contenu d'un \emph{symlink} doit être considéré différemment de celui d'un fichier regulier. En effet, si le chemin pointé par le \emph{symlink} fait moins de 60 caractères, le tableau \textsf{i\_block[]} est entièrement utilisé pour stocker les données (on utilise pas de \emph{blocks} indirects). Au contraire, si la taille du chemin pointé est supérieur à 60 caractères, on l'affiche de la même façon qu'un fichier régulier.
+\subsubsection{print\_dir()}
+Pour afficher le contenu d'un répertoire, il faut lire les \emph{dir entries}
+qui composent les données de l'\emph{inode} du répertoire. Pour se déplacer
+d'une \emph{dir entry} à l'autre, \emph{rec\_len}~octets doivent êtres
+sautés. Cette fonction récursive est dédiée à ce travail.
+
+
+\subsection{block.c}
+\subsubsection{read\_block()}
+Cette fonction remplit un tableau de caractères avec le contenu d'un \emph{block} de données. Le \emph{block} peut être de différentes tailles suivant le système de fichier : 1024, 2048 ou 4096~octets.
+\subsubsection{read\_block\_pointer()}
+Même fonction que la précédente, cependant on y remplit un tableau de \_\_u32. Ceci va nous permettre de lire ce tableau et de connaître les \emph{blocks} de données à partir d'un \emph{block} indirect.
+\subsubsection{print\_blocks()}
+Fonction récursive qui affiche tout le contenu d'un fichier, c'est à dire tous les \emph{blocks} alloués pour un \emph{inode} donné.
+
+\subsection{search.c}
+
+ext3Viewer permet à l'utilisateur de rechercher un fichier, pour cela il peut
+procéder de deux manières : rechercher par le nom de fichier ou par son numéro
+d'inode.\\
+
+Rechercher un fichier par son nom :\\
+Nous utilisons pour la recherche par nom de fichier la syntaxe \emph{extended
+regex}. La fonction \textsf{search\_file()} cherche à partir du répertoire (donné
+comme argument) dans tous les dossiers enfants, un fichier qui correspond à un pattern regex.
+
+Pour rechercher un fichier on utilise trois fonctions : \textsf{search\_file()},
+\textsf{search\_file\_rec()} et \textsf{search\_file\_rec\_block()}.\\
+
+Des fonctions similaires existent pour chercher un fichier par son numéro d'\emph{inode}.
+
+	   
+\subsection{path.c}
+Ce fichier contient un ensemble de fonctions utilisées pour empiler le chemin d'un fichier dans les fonctions de recherche récursives.
+
+\subsection{journal.c}
+Ce fichier contient les fonctions de lectures et d'affichage des informations liées au journal.
+\subsubsection{read\_journal\_superblock()}
+Fonction de lecture du \emph{journal superblock}. Cette fonction prend comme un de ses arguments le numéro de \emph{block} du premier \emph{block} de données du journal (inode 8).
+\subsubsection{print\_journal\_superblock()}
+Cette fonction affiche les champs du \emph{journal superblock} et leur correspondance avec les informations de \textit{/usr/include/linux/jbd.h}.
+\subsubsection{read\_journal\_header()}
+Lit un en-tête d'un \emph{block} du journal.
+\subsubsection{dump\_journal()}
+Affiche le contenu du journal : les \emph{blocks} de la partitions en
+relation avec le journal, et les \emph{flags} expliquant l'action effectuée.
+
+\subsection{acl.c}
+\subsubsection{read\_xattrh()}
+Fonction utilisée pour lire le header des \emph{extended attributes}.
+\subsubsection{read\_xattre()}
+Lecture d'une entrée d'\emph{extended attribute}.
+\subsubsection{print\_acl()}
+Affichage des \emph{extended attributes} \footnote{La partie dédiée à la
+  gestion des \emph{Access Control Lists} n'est pas opérationnelle.}
+
+\subsection{main.c}
+Ce fichier fait l'interface entre les demandes de l'utilisateur en mode console, et l'appel des fonctions correspondantes (affichage de la syntaxe, affichage de message d'erreur \ldots{}).
+
+\subsection{text.h}
+Cet en-tête contient les textes utilisés en mode console pour afficher le
+rappel des fonctionalités et l'aide qui explique leurs utilités respectives.
+
+\subsection{debug.h}
+Définition de quelques macros pour le débuggage du logiciel.
+Nous avons défini des macros \textsf{DEBUG\_PRINT} et \textsf{DEBUG\_PRINT\_V} qui permettent de débug\-ger le programme. Elles peuvent être activées à la compilation grâce aux options -DDEBUG et -DDEBUG\_VERBOSE à rajouter dans le \emph{Makefile} comme \emph{CFLAGS}.
+\section{Divers}
+
+\subsection{Gestion des erreurs}
+Pour le mode console du programme, les messages d'erreur sont écrits sur \emph{stderr}, la sortie standard d'erreur sous Linux. De plus, lorsqu'un erreur survient, la valeur 1 est renvoyée.
+\\
+Pour la partie graphique les erreurs sont signalées par un pop-up.
+
+
+\appendix                     % Commençons les annexes
+
+\chapter{Bibliographie}
+%section{Bibliographie}
+Voici une liste non-exhaustive des livres et publications conseillées pour la compréhension du système de fichier ext3 :\\
+	\\
+\textit{Understanding the Linux Kernel}, chapitre 17, \emph{O'REILLY} : explication générale sur l'organisation du système de fichier ext2\\
+	      \\
+\verb|http://www.suse.de/~agruen/acl/linux-acls/online/| : documentation con\-cernant les ACL.\\
+  \\
+\verb|http://kerneltrap.org/node/6741| : informations sur le journal jbd.\\
+\verb|http://lxr.linux.no/|:\\
+Sources du noyau pour plusieurs versions, avec des possibilités de comparaison.
+\verb|http://www.nongnu.org/ext2-doc/ext2.html| :\\
+Documentation technique concernant ext2. Un bon nombre des informations restent valable pour ext3.\\
+
+%\printindex
+%%%%%%%%%%%%%%%%%
+\end{document}

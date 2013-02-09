@@ -1,0 +1,22 @@
+mke2fs 1.39 (29-May-2006)
+im.ext3 is not a block special device.
+Proceed anyway? (y,n) y
+Filesystem label=
+OS type: Linux
+Block size=1024 (log=0)
+Fragment size=1024 (log=0)
+312 inodes, 2500 blocks
+125 blocks (5.00%) reserved for the super user
+First data block=1
+Maximum filesystem blocks=2621440
+1 block group
+8192 blocks per group, 8192 fragments per group
+312 inodes per group
+
+Writing inode tables: done                            
+Creating journal (1024 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+This filesystem will be automatically checked every 39 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.
+

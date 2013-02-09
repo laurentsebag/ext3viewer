@@ -1,0 +1,71 @@
+\section{Rappel du cahier des charges}
+Le programme devait être divisé en deux parties: une partie graphique, et une
+partie console.
+
+
+\subsection*{Fonctionnalités utilisateur}
+
+\subsubsection{Visualisation des structures ext3}
+	Le programme devait permettre de visualiser les différentes structures du système de fichier ext3 ainsi que les  valeurs prises par chacun des champs, ceux-ci étant explicités. 
+
+\subsubsection{Navigation à travers le système de fichier}
+L'interface graphique permettrait de naviguer à travers le système de fichier
+tandis que le mode console, réservé aux utilisateurs experimentés, devait
+permettre de visualiser les structures. Grâce à l'interface graphique,
+l'utilisateur devait voir ses fichiers et dossiers habituels et pouvoir
+afficher la structure de chaque inode, les informations concernant le \emph{boot
+sector}, les \emph{group blocks}, le \emph{superblock}, les \emph{bitmaps}. Le journal du système de
+fichier devait être affiché. Une explication sur les structures, les
+utilisations du système de fichier et leurs conséquences avait été prévue pour
+une partie aide.
+\subsubsection{Correspondance nom/inode et inversement}
+Le logiciel pourrait traduire un nom de fichier vers le
+numéro d'inode correspondant, chercher un fichier, à partir
+de son numéro d'inode, et afficher à quel inode est rattaché un block en
+tapant son numéro de block.
+\subsubsection{Recherche de structures libres}
+Le programme permettrait de trouver le prochain inode libre sur le disque, ou le prochain block libre. On pourrait de plus tester si un inode ou un block est utilisé, et le cas échéant se rendre au bon endroit dans l'arborescence pour afficher la structure du fichier ou dossier.
+\subsubsection{Plate-formes d'utilisation}
+Le programme serait compatible Linux, et peut être Windows et MacOS.
+
+\section{Evolution du cahier des charges}
+Comme expliqué précédemment, le projet a été réalisé en anglais; les modules d'internationalisation n'ont donc pas été implémentés.
+Le découpage mode console/mode graphique a été conservé. Par contre, certaines
+fonctionnalités n'ont pas été développées, car elles n'étaient pas
+indispensables à la compréhension générale de ext3.
+Certaines structures, comme les ACLs, n'ont pas été affichées, ou bien affichées d'une autre façon après une étude plus détaillée du système de fichier.\\
+La compatibilité avec Windows a été provisoirement abandonnée, du fait de l'absence de nombreuses fonctions basiques  (open, read, lseek...), mais un port vers cette platforme est théoriquement possible, en créant ses propres fonctions, en utilisant les fonctions de compatibilité de la Glib (bibliothèque de Gnome, multiplateforme), ou en utilisant Cygwin...\\
+La compatibilité avec MacOS n'a pas encore été testée, mais est envisageable
+(MacOS X est compatible POSIX).
+\subsection*{Résumé des fonctionnalités prévues/créées}
+
+\subsubsection{Visualisation des structures ext3}
+OK: Les structures principales sont affichées, avec des explications supplémentaires sur certains de leurs champs. \\
+Structures affichées: \emph{Superblocks, Inodes, Block Bitmap, Inode bitmap,
+  Group Descriptors, Journal Superblock Header, Journal Header, Direntries,
+  Extended Attributes,Blocks}\\
+Structures non affichées: \emph{Access Control Lists}.
+
+\subsubsection{Navigation à travers le système de fichier}
+OK:La navigation est assurée par un 'explorateur' de fichiers en mode graphique, et par l'option -ls, plus le numéro d'inode (l'inode de la racine étant l'inode 2).
+
+\subsubsection{Correspondance nom/inode et inversement}
+OK: En mode graphique, l'utilisateur peut y accéder grace à une barre de
+recherche visible sur l'écran principal; en mode console, il peut y accéder
+grace aux options -find (nom, et numéro d'inode du dossier parent vers numéro
+d'inode) et -iname (numéro d'inode vers nom).
+
+\subsubsection{Recherche de structures libres}
+OK:Le mode graphique possède dans le menu 'Tools' des boutons pour l'affichage
+des bitmaps (\emph{inode bitmap},\emph{ block bitmap}), et la recherche du
+premier inode ou block libre, pour chaque \emph{block group}.\\
+Les fonctions pour déterminer si un inode ou un block sont utilisées n'ont pas
+été développées, car l'utilisateur peut aller voir dans l'inode ou le block
+bitmap si la structure est occupée ou non.
+
+\subsubsection{Plate-formes d'utilisation}
+Le programme ext3viewer a été testé avec Gentoo, SuSe 10.1, Slackware
+10.1,11.0 en architecture little-endian. La compatibilité Windows n'est pas
+assurée, pour la version 1.0. La compatibilité Mac OS n'a pas été testée.
+ Bien que des fonctions du type \emph{le32\_to\_cpu()} soient utilisées dans le code, pour assurer la compatibilité avec les machines possèdant une architecture différente, il faudrait pouvoir la vérifier directement sur celles-ci.
+\\

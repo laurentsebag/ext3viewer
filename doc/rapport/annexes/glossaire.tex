@@ -1,0 +1,31 @@
+\section{Glossaire}
+
+
+Voici quelques définitions \footnote{Le vocabulaire technique est utilisé en anglais, par souci de cohérence avec
+le code.} techniques:
+\begin{description}
+\item[Inode]{: Structure des systèmes de fichiers linux qui sert à garder les informations administratives sur un fichier (taille, nom...)}
+\item[Block]{: zone délimitée sur le disque contenant un certain nombre
+    d'octets (sous ext3, 1024, 2048 ou 4096).}
+\item[Data block]{: block destiné spécifiquement à contenir les données de
+    l'utilisateur (fichiers, ACLs...), plutôt que les structures du système de
+    fichiers.}
+\item[Block group]{: Groupe de blocks, contenant les structures du système de
+    fichier (superblock, inodes, data blocks...). Leur nombre est fonction de
+    la taille des blocks et de la taille de la partition.}
+\item[Superblock]{:structure des systèmes de fichiers ext2/3, qui conserve les
+    informations sur le système de fichiers lui-même (taille d'un block,
+    fonctionnalités présentes...)}
+\item[Group descriptor]{:structure des systèmes de fichiers ext2/3, qui
+    conserve les informations sur le groupe (position de l'inode bitmap,
+    nombre de dossiers...)}
+\item[Inode table]{: ensemble de tous les inodes d'un block group.}
+\item[Bitmap]{: 'carte', qui fait correspondre à un bit l'état booléen d'une donnée. Dans le cas de l'inode et du block bitmap, il s'agit de savoir si le block est libre (0) ou occupé (1).}
+\item[Journal]{: 'partie' d'un système de fichier qui aide à préserver l'intégrité de celui-ci en enregistrant ses modifications.}
+\item[POSIX]{: Portable Operating System Interface  Ensemble de standards, créés pour rendre compatibles entre elles différentes variantes de UNIX (Solaris, Cygwin, Mac OS X, Linux (partiellement)). }
+\item[ACL]{: Access  Control List. Listes de permissions dédiées à la gestion
+plus 'fine' des droits utilisateurs (lecture, écriture, execution...), et
+disponibles sur plusieurs systèmes de fichiers (ext3, NTFS...)}
+\item[API]{:Application Programming Interface. Bibliothèque contenant des
+    fonctions pouvant être appelées depuis un programme.}
+\end{description}

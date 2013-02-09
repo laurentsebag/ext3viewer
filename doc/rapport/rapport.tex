@@ -1,0 +1,51 @@
+\documentclass[a4paper,oneside,10pt,final]{report} 
+
+% Options possibles : 10pt, 11pt, 12pt (taille de la fonte)
+%                     oneside, twoside (recto simple, recto-verso)
+%                     draft, final (stade de développement)
+
+\usepackage[latin1]{inputenc} % LaTeX, comprends les accents !
+%\usepackage[T1]{fontenc}      % Police contenant les caractères français
+%\usepackage{geometry}         % Définir les marges
+\usepackage[francais]{babel}  % liste de langues, la dernière étant la langue
+                              % principale
+\usepackage{graphicx}
+
+
+% Les paramètres du titre : titre, auteur, date
+\title{ext3Viewer \\ Rapport de projet}
+\author{Laurent Sebag \and Nathan Periana \and \\Tuteur:M. Konstantin Verchinine}
+\date{2006-2007}
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+
+\chapter {Introduction}
+\input {introduction/introduction.tex}
+
+\chapter {Cahier des charges}
+\input {cahier_charges/cahier_charges.tex}
+
+\chapter {Développement}
+\input {devel/devel.tex}
+
+\chapter {Bilans}
+\input {bilan/bilan.tex}
+
+\chapter {Conclusion}
+\input {bilan/conclusion.tex}
+
+\chapter {Annexes}
+\input {annexes/glossaire.tex}
+\input {annexes/remerciements.tex}
+\input {annexes/liens.tex}
+
+\end{document}
+
