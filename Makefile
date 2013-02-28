@@ -1,23 +1,23 @@
 ##################
 # DEFAULT CONFIG #
 ##################
-#INSTALL_DIR= /usr/local/share/ext3Viewer/
-#BIN_DIR= /usr/local/bin/
-#MAN_DIR=/usr/share/man/man1/
-#USER=root
-#GROUP=root
+INSTALL_DIR= /usr/local/share/ext3Viewer/
+BIN_DIR= /usr/local/bin/
+MAN_DIR=/usr/share/man/man1/
+USER=root
+GROUP=root
 
 
 #######################################
 ##EXEMPLE OF CONFIG FOR NON ROOT USERS#
 #######################################
-INSTALL_DIR=~/.local/share/ext3Viewer
-# BIN_DIR: optional path to put binaries into. Must be different than
-# INSTALL_DIR and should be in your path.
-BIN_DIR=~/roro/
-MAN_DIR=~/.local/share/man/
-USER=laurent
-GROUP=users
+#INSTALL_DIR=~/.local/share/ext3Viewer
+## BIN_DIR: optional path to put binaries into. Must be different than
+## INSTALL_DIR and should be in your path.
+#BIN_DIR=~/roro/
+#MAN_DIR=~/.local/share/man/
+#USER=laurent
+#GROUP=users
 
 all: ext3Viewer gui #man doc
 
@@ -107,7 +107,7 @@ uninstall:
 	rm -f $(INSTALL_DIR)/bin/gext3Viewer
 	rm -f $(INSTALL_DIR)/bin/ext3Viewer
 	if [ -n "$(BIN_DIR)" ];then \
-		if [ -z "$(ls -A $(BIN_DIR) 2>/dev/null)" ]; then \
+		if [ -z "$$(ls -A $(BIN_DIR) 2>/dev/null)" ]; then \
 			rmdir $(BIN_DIR)/;\
 		fi;\
 	fi
