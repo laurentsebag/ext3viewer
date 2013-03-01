@@ -30,7 +30,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <linux/ext3_fs.h>
+#include "linux/ext3_fs.h"
 #include <time.h>
 
 #include "groups.h"

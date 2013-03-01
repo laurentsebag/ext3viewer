@@ -27,7 +27,7 @@
 #define TREE_MENU_GUI_H
 
 #include <stdlib.h>
-#include <linux/ext3_fs.h>
+#include "../linux/ext3_fs.h"
 
 #include "tree_gui.h"
 #include "output_gui.h"

@@ -27,7 +27,7 @@
 #define OUTPUT_GUI_H
 
 #include <sys/stat.h>
-#include <linux/ext3_fs.h>
+#include "../linux/ext3_fs.h"
 
 #include "../inode.h"
 #include "../journal.h"

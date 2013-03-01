@@ -27,7 +27,7 @@
 #define OBJECTS_GUI_H
 
 #include <unistd.h>
-#include <linux/ext3_fs.h>
+#include "../linux/ext3_fs.h"
 
 
 

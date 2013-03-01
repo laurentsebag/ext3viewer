@@ -234,7 +234,7 @@ int dump_journal_block ( int fd, int block_size, __u32 block_num ) {
 	  return -1;
 	}
 	sret = read( fd, &jb_tag, sizeof(struct journal_block_tag_s ) );
-	if ( lret == -1 ) {
+	if ( sret == -1 ) {
 	  perror("read dump journal block");
 	  return -1;
 	}

@@ -27,7 +27,7 @@
 #define TREE_GUI_H
 
 #include <sys/stat.h>
-#include <linux/ext3_fs.h>
+#include "../linux/ext3_fs.h"
 #include <string.h>
 #include <stdlib.h>
 

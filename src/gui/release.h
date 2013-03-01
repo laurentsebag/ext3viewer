@@ -27,7 +27,7 @@
 #define RELEASE_H
 
 #define ABOUT_NAME     "ext3Viewer GUI"
-#define VERSION        "1.0.1"
+#define VERSION        "1.0.2"
 #define COPYRIGHT      "Copyright © 2007 Laurent Sebag & Nathan Periana"
 #define COMMENTS       "A graphical ext3 filesystem low-level viewer"
 #define WEBSITE        "http://ext3viewer.free.fr"

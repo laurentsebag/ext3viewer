@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <linux/ext3_fs.h>
+#include "linux/ext3_fs.h"
 
 #include "text.h"
 #include "superblock.h"

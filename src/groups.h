@@ -26,7 +26,7 @@
 #ifndef GROUPS_H  
 #define GROUPS_H
 
-#include <linux/ext3_fs.h>
+#include "linux/ext3_fs.h"
 #include <strings.h>
 //#include <sys/types.h>
 #include <unistd.h>

@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <linux/ext3_fs.h>
+#include "linux/ext3_fs.h"
 
 #include "debug.h"
 #include "filesystem.h"
