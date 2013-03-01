@@ -32,12 +32,11 @@
 #define A_LCOL "\n|"
 
 #define HELP_TXT "Usage: %s <fd>  \n\
-               [ -stats  | -stat  | -printgd | -imap | -bmap |\n\
-                 -ffi    | -ffb   | -cat     | -bcat | -ls   |\n\
-                 -find   | -iname | -backups | -acl  | -jbd  |\n\
-                 -bpoint | -tree  ]\n\
+               [ -stats   | -stat | -printgd | -imap | -bmap | -ffi   |\n\
+                 -ffb     | -cat  | -bcat    | -ls   | -find | -iname |\n\
+                 -backups | -jbd  | -bpoint  | -tree ]\n\
 '%s -help' for help.\n\
-version: ext3Viewer 1.0.1\n"
+version: ext3Viewer 1.0.2\n"
 
 #define HELP_TXT_VERBOSE "Usage: %s <FILESYSTEM> OPTION ARG1 [ ARG2 ... ]\n\n\
  Dumps and interprets informations about ext3 filesystems.\n\
@@ -84,7 +83,8 @@ version: ext3Viewer 1.0.1\n"
 \n\n\
 \t-help                      display this help. see also the man page\n\n\
  See the man page for more details.\n\n\
-ext3Viewer 1.0 GNU public license\n\
+ext3Viewer 1.0.2 GNU public license\n\
+Copyright (C) 2013 Laurent Sebag\n\
 Copyright (C) 2007 Laurent Sebag & Nathan Periana\n\
 e2view (2003) Julien Poitrat, original idea\n"
 

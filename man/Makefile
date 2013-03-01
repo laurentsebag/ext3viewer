@@ -7,5 +7,5 @@ ps:
 #txt:
 #	groff -t -e -mandoc -Tascii ext3Viewer.1 | col -bx > ext3viewer_manpage.txt
 clean:
-	rm -f ./ext3Viewer.1.ps *~
+	rm -f ./ext3Viewer.1.ps ./ext3Viewer.1.pdf *~
 .PHONY: ps pdf clean 

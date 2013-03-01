@@ -1,6 +1,8 @@
 Altough the project works pretty well there are still things to correct.
 Here is the TODO list :
 
+ - change all strings to english 
+
  - cleaning code : a lot of the source code should be cleaned ; output functions
    have to be rewritten so that the same functions for the gui and the console
    could be called
@@ -17,6 +19,13 @@ Here is the TODO list :
 
  - implement input of files as a string. ex: /etc/foo.conf
 
- - ... and many other things
+ - internationalization
+
+ - see if it is possible to use e2fs headers instead of ext3_fs.h like described in
+   linux 3.x commit (ext3_fs.h is no longer exported by the kernel).
+ 
+ - more information about journaling
+
+ - support for ext4
 
 Laurent Sebag <ext3viewer@free.fr>

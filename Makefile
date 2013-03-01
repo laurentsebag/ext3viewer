@@ -19,14 +19,11 @@ GROUP=root
 #USER=laurent
 #GROUP=users
 
-all: ext3Viewer gui #man doc
+all: ext3Viewer gui #man
 
 ext3Viewer: src/*.c src/*.h src/Makefile
 	make -C src/ all
 	
-doc:
-	make -C doc/devel/
-	make -C doc/rapport/
 gui:
 	INSTALL_DIR=$(INSTALL_DIR) make -e -C src/gui/
 man:
@@ -44,7 +41,6 @@ install: ext3Viewer gui
 	install -g $(GROUP) -o $(USER) -m 0555 ./gext3Viewer $(INSTALL_DIR)/bin/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./COPYING $(INSTALL_DIR)/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./README $(INSTALL_DIR)/;
-	install -g $(GROUP) -o $(USER) -m 0444 ./VERSION $(INSTALL_DIR)/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./man/ext3Viewer.1 $(MAN_DIR)/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./src/gui/img/about.png $(INSTALL_DIR)/img/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./src/gui/img/blockdevice.png $(INSTALL_DIR)/img/;
@@ -101,7 +97,6 @@ uninstall:
 	rm -f $(INSTALL_DIR)/img/blockdevice.png
 	rm -f $(INSTALL_DIR)/img/about.png
 	rm -f $(MAN_DIR)/man/ext3Viewer.1
-	rm -f $(INSTALL_DIR)/VERSION
 	rm -f $(INSTALL_DIR)/README
 	rm -f $(INSTALL_DIR)/COPYING
 	rm -f $(INSTALL_DIR)/bin/gext3Viewer
@@ -125,10 +120,8 @@ depend:
 clean:
 	rm -f *~
 	make -C src/ clean
-	make -C doc/devel clean
-	make -C doc/rapport clean
 	make -C src/gui/ clean
 	make -C man/ clean
 
-.PHONY: clean all doc gui depend man install uninstall
+.PHONY: clean all gui depend man install uninstall
 
