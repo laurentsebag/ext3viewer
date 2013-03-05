@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -23,7 +23,7 @@
 
 
 
-#ifndef SUPERBLOCK_H 
+#ifndef SUPERBLOCK_H
 #define SUPERBLOCK_H
 
 //#include <linux/ext3_fs.h>
@@ -37,7 +37,7 @@
 int read_superblock ( int fd, struct ext3_super_block *sb );
 
 int read_superblock_backup ( int fd, struct ext3_super_block *sb,
-			     __u32 block_num, int block_size );
+    __u32 block_num, int block_size );
 
 int read_superblock_gui ( int fd, struct ext3_super_block *sb );
 
@@ -45,4 +45,4 @@ void print_sb_copy (const struct ext3_super_block *sb);
 
 void print_superblock ( const struct ext3_super_block *sb );
 
-#endif 
+#endif

@@ -23,7 +23,7 @@
 
 
 
-#ifndef PATH_H 
+#ifndef PATH_H
 #define PATH_H
 
 #include "linux/ext3_fs.h"
@@ -43,4 +43,4 @@ void free_path(struct path_filo **p);
 void view(const struct path_filo *p);
 void fill_path_name( struct path_filo *p, char *string );
 
-#endif 
+#endif

@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -33,13 +33,14 @@ int push ( struct path_filo **p, const char * name, __u32 inode ) {
 
   struct path_filo *element = malloc(sizeof(path_filo));
   if(!element) {
-    perror("path_filo");     /* Si l'allocation a echouee. */
+    // if the allocation failed
+    perror("path_filo");
     return -1;
   }
   strcpy ( element->name, name );
   element->inode = inode;
   element->prev = *p;
-  *p = element;       /* Le pointeur pointe sur le dernier element. */
+  *p = element;       // The pointer points to the last element
   return 0;
 }
 
@@ -47,10 +48,10 @@ int remove_top(struct path_filo **p)
 {
   struct path_filo *tmp;
   if( *p == NULL ) 
-    return -1;     /* Retourne -1 si la pile est vide. */
+    return -1;     // Returns -1 if the stack is empty
   tmp = (*p)->prev;
   free(*p);
-  *p = tmp;       /* Le pointeur pointe sur le dernier element. */
+  *p = tmp;       // The pointer points to the last element
   return 0;
 }
 
@@ -58,18 +59,18 @@ void free_path(struct path_filo **p)
 {
   struct path_filo *tmp;
   while( *p != NULL )
-    {
-      tmp = (*p)->prev;
-      free(*p);
-      *p = tmp;
-    }
+  {
+    tmp = (*p)->prev;
+    free(*p);
+    *p = tmp;
+  }
 }
 
 void view(const struct path_filo *p)
 {
   if ( p != NULL ) {
     view ( p->prev) ;
-  printf("%s %d ",p->name, p->inode);
+    printf("%s %d ", p->name, p->inode);
 
   }
 }
@@ -83,3 +84,4 @@ void fill_path_name( struct path_filo *p, char *string )
 
   }
 }
+

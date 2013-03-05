@@ -26,21 +26,19 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-//#define DEBUG
-
-
 #ifdef DEBUG
 #define DEBUG_PRINT(string,args) \
         printf("ext3Viewer - DEBUG :\t " string "\n",args);
 #else
-#define DEBUG_PRINT(string,args) 
+#define DEBUG_PRINT(string,args)
 #endif
 
 #ifdef DEBUG_VERBOSE
 #define DEBUG_PRINT_V(string,args) \
         printf("ext3Viewer - DEBUG_V :\t " string "\n",args);
 #else
-#define DEBUG_PRINT_V(string,args) 
+#define DEBUG_PRINT_V(string,args)
 #endif
 
 #endif
+

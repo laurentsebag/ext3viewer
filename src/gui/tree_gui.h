@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -36,10 +36,10 @@
 #include "tree_menu_gui.h"
 #include "lang.h"
 
-/* sert a definir les colones de l'arbre */
+// Used to set the columns in the tree
 enum {
   ROW_COLOR,
-  ROW_WEIGHT, 
+  ROW_WEIGHT,
   TYPE_PIX,
   FILE_NAME,
   INODE_NUM,
@@ -58,22 +58,23 @@ struct fileTree {
   GtkTreeIter iter2;
   GtkTreePath *path;
   gint index;
-  // rajouter socket pipe symlink char block ...
 };
 
 
 
-GtkWidget* create_tree(); /* on cree l'arbre et sa structure */
-void init_tree(); /*on y met les premieres valeurs : contenu de */
-void explore_dir ( int fd, struct ext3_super_block *sb, __u32 i_num, 
-		   GtkTreeIter clicked_dir );
+// Create the tree and its structure
+GtkWidget* create_tree(); 
+// Add the first values
+void init_tree(); 
+void explore_dir ( int fd, struct ext3_super_block *sb, __u32 i_num,
+    GtkTreeIter clicked_dir );
 void explore_dir_blocks ( int fd, struct ext3_super_block *sb,
-			  __u32 block_num, short rec_level,
-			  GtkTreeIter clicked_dir );
+    __u32 block_num, short rec_level,
+    GtkTreeIter clicked_dir );
 void on_row_double_click(GtkTreeView *treeview, GtkTreePath *path,
-			 GtkTreeViewColumn  *col, gpointer userdata);
+    GtkTreeViewColumn  *col, gpointer userdata);
 gboolean onButtonPressed (GtkWidget *treeview, GdkEventButton *event,
-			       gpointer userdata);
+    gpointer userdata);
 
 //extern gboolean onPopupMenu (GtkWidget *treeview, gpointer userdata);
 /* definit dans tree_menu_gui.h */

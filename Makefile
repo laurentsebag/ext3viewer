@@ -3,7 +3,7 @@
 ##################
 INSTALL_DIR= /usr/local/share/ext3Viewer/
 BIN_DIR= /usr/local/bin/
-MAN_DIR=/usr/share/man/man1/
+MAN_DIR=/usr/share/man/
 USER=root
 GROUP=root
 
@@ -14,7 +14,7 @@ GROUP=root
 #INSTALL_DIR=~/.local/share/ext3Viewer
 ## BIN_DIR: optional path to put binaries into. Must be different than
 ## INSTALL_DIR and should be in your path.
-#BIN_DIR=~/roro/
+##BIN_DIR=~/.local/bin/
 #MAN_DIR=~/.local/share/man/
 #USER=laurent
 #GROUP=users
@@ -40,7 +40,7 @@ install: ext3Viewer gui
 	install -g $(GROUP) -o $(USER) -m 0555 ./ext3Viewer $(INSTALL_DIR)/bin/;
 	install -g $(GROUP) -o $(USER) -m 0555 ./gext3Viewer $(INSTALL_DIR)/bin/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./COPYING $(INSTALL_DIR)/;
-	install -g $(GROUP) -o $(USER) -m 0444 ./README $(INSTALL_DIR)/;
+	install -g $(GROUP) -o $(USER) -m 0444 ./README.md $(INSTALL_DIR)/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./man/ext3Viewer.1 $(MAN_DIR)/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./src/gui/img/about.png $(INSTALL_DIR)/img/;
 	install -g $(GROUP) -o $(USER) -m 0444 ./src/gui/img/blockdevice.png $(INSTALL_DIR)/img/;
@@ -96,8 +96,8 @@ uninstall:
 	rm -f $(INSTALL_DIR)/img/chardevice.png
 	rm -f $(INSTALL_DIR)/img/blockdevice.png
 	rm -f $(INSTALL_DIR)/img/about.png
-	rm -f $(MAN_DIR)/man/ext3Viewer.1
-	rm -f $(INSTALL_DIR)/README
+	rm -f $(MAN_DIR)/ext3Viewer.1
+	rm -f $(INSTALL_DIR)/README.md
 	rm -f $(INSTALL_DIR)/COPYING
 	rm -f $(INSTALL_DIR)/bin/gext3Viewer
 	rm -f $(INSTALL_DIR)/bin/ext3Viewer

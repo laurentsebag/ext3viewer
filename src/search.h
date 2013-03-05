@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -35,34 +35,34 @@
 #include "debug.h"
 #include "inode.h"
 
-int search_file ( int fd, struct ext3_super_block *sb, __u32 i_num, 
-		    char *pattern );
+int search_file ( int fd, struct ext3_super_block *sb, __u32 i_num,
+    char *pattern );
 
 int search_file_rec ( int fd, struct ext3_super_block *sb,
-			__u32 i_num, const regex_t *preg ,
-			struct path_filo *path, char *path_name );
+    __u32 i_num, const regex_t *preg ,
+    struct path_filo *path, char *path_name );
 
-int search_file_rec_block ( int fd, struct ext3_super_block *sb, 
-			      const regex_t *preg, __u32 block_num, 
-			      short rec_level , struct path_filo *path,
-			      char *path_name );
+int search_file_rec_block ( int fd, struct ext3_super_block *sb,
+    const regex_t *preg, __u32 block_num,
+    short rec_level , struct path_filo *path,
+    char *path_name );
 
 
 int search_inode ( int fd, struct ext3_super_block *sb, __u32 i_num,
-		   __u32 i_tofind );
+    __u32 i_tofind );
 
 int search_inode_rec ( int fd, struct ext3_super_block *sb, __u32 i_num,
-		     __u32 i_tofind, struct path_filo *path, char *path_name);
+    __u32 i_tofind, struct path_filo *path, char *path_name);
 
-int search_inode_rec_block ( int fd, struct ext3_super_block *sb, 
-			     __u32 i_tofind, __u32 block_num, 
-			     short rec_level, struct path_filo *path,
-			     char *path_name );
+int search_inode_rec_block ( int fd, struct ext3_super_block *sb,
+    __u32 i_tofind, __u32 block_num,
+    short rec_level, struct path_filo *path,
+    char *path_name );
 
 __u32 search_first_free_inode(int fd, const struct ext3_super_block *sb,
-				char * inodebitmap);
+    char * inodebitmap);
 __u32 search_first_free_block(int fd, const struct ext3_super_block *sb,
-				char * datablockbitmap);
+    char * datablockbitmap);
 
 
 #endif

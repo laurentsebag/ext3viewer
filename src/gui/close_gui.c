@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -33,7 +33,6 @@ extern struct fileTree tree;
 void onQuit(GtkWidget *pWidget, gpointer pData) {
   if ( fs.isopen ) {
     close_fs(fs.fd);
-    //printf("fermeture du systeme de fichier\n");
   }
   gtk_main_quit();
 }
@@ -45,15 +44,14 @@ void onClose( GtkWidget *widget, gpointer data) {
   //  GtkTreePath *path;
 
   if ( fs.isopen ) {
-    //printf("fermeture du systeme de fichier et de l'arbre\n");
-    /* on recupere le buffer */
+    // get the buffer
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW (centre.texte));
-    
-    /* on vide la zone de texte */
+
+    // empty the text area
     gtk_text_buffer_get_bounds ( buffer, &start, &end);
     gtk_text_buffer_delete ( buffer, &start, &end );
-    
-    /* on vide l'arbre */
+
+    // empty the tree
     gtk_tree_store_clear ( tree.treeStore );
     fs.isopen = 0;
     close_fs(fs.fd);

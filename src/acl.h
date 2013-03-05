@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -48,7 +48,7 @@
 #include "filesystem.h"
 
 /*
- * Taken from kernel 2.6.17.13 sources: fs/ext3/xattr.h 
+ * Taken from kernel 2.6.17.13 sources: fs/ext3/xattr.h
  */
 #define EXT3_XATTR_MAGIC                0xEA020000
 
@@ -59,7 +59,7 @@ struct ext3_xattr_header {
     __le32  h_hash;         /* hash value of all attributes */
     __u32   h_reserved[4];  /* zero right now */
 };
-   
+
 //struct ext3_xattr_ibody_header {
 //    __le32  h_magic;        /* magic number for identification */
 //};
@@ -74,23 +74,23 @@ struct ext3_xattr_entry {
     char    e_name[0];      /* attribute name */
 };
 
-//#define ACL_USER_OBJ		(0x01)
-//#define ACL_USER		(0x02)
-//#define ACL_GROUP_OBJ		(0x04)
-//#define ACL_GROUP		(0x08)
-//#define ACL_MASK		(0x10)
-//#define ACL_OTHER		(0x20)
+//#define ACL_USER_OBJ    (0x01)
+//#define ACL_USER    (0x02)
+//#define ACL_GROUP_OBJ    (0x04)
+//#define ACL_GROUP    (0x08)
+//#define ACL_MASK    (0x10)
+//#define ACL_OTHER    (0x20)
 
-//int read_aclh(int fd,const struct ext3_super_block *sb, __u32 acl_position,
-//	      struct ext3_acl_header * aclh);
-//int read_acl(int fd,const struct ext3_super_block *sb, __u32 acl_position,
-//	     struct ext3_acl_entry * acl);
-int read_xattrh(int fd,const struct ext3_super_block *sb,
+//int read_aclh(int fd, const struct ext3_super_block *sb, __u32 acl_position,
+//        struct ext3_acl_header * aclh);
+//int read_acl(int fd, const struct ext3_super_block *sb, __u32 acl_position,
+//       struct ext3_acl_entry * acl);
+int read_xattrh(int fd, const struct ext3_super_block *sb,
       __u32 header_blocknum, struct ext3_xattr_header * header );
-int read_xattre(int fd,const struct ext3_super_block *sb,
+int read_xattre(int fd, const struct ext3_super_block *sb,
       __u32 entry_blocknum, __u16 offset, struct ext3_xattr_entry * entry );
 
-void print_acl(int fd,const struct ext3_super_block *sb,__u32 i_type_acl);
+void print_acl(int fd, const struct ext3_super_block *sb, __u32 i_type_acl);
 // void print_aclentrytype(__u16 acle_type)//???
 
-#endif 
+#endif

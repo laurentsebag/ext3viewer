@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -39,10 +39,10 @@
 #include "block.h"
 
 void read_inode( int fd, struct ext3_super_block *sb,
-		 __u32 num, struct ext3_inode *i );
+    __u32 num, struct ext3_inode *i );
 
-void print_inode (int fd,const struct ext3_super_block *sb, 
-		  const struct ext3_inode *in);
+void print_inode (int fd, const struct ext3_super_block *sb,
+    const struct ext3_inode *in);
 
 
 void print_file ( int fd, struct ext3_super_block *sb, __u32 i_num, int mode );
@@ -53,13 +53,13 @@ void print_symlink ( int fd, struct ext3_super_block *sb, __u32 i_num);
 void print_dir ( int fd, struct ext3_super_block *sb, __u32 i_num );
 
 void print_dir_blocks ( int fd, struct ext3_super_block *sb,
-			__u32 block_num, short rec_level );
+    __u32 block_num, short rec_level );
 
 void print_tree( int fd, struct ext3_super_block *sb, struct ext3_inode *i );
 
 /*Various functions used to 'resolve' informations from field values*/
-int  mask(const __u32 value,const __u32 macro);
-void print_binary(const __u32 value,const int size);
+int  mask(const __u32 value, const __u32 macro);
+void print_binary(const __u32 value, const int size);
 void print_time(const __u32 timestamp);
 void print_state(__u16 s_state);
 void print_errorbehavior(__u16 s_errors);
@@ -74,4 +74,4 @@ void print_filemode(__u16 i_mode);
 void print_fileflags(__u32 i_flags);
 void print_blockpointers( __u32 i_block[] );
 
-#endif 
+#endif

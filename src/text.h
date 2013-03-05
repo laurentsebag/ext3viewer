@@ -48,7 +48,7 @@ version: ext3Viewer 1.0.2\n"
  OPTION and ARGS are shown below :\n\
 \
 \t-stats [ <block num> <block size> ]\n\
-\t                           info about the superbloc and the group\n\
+\t                           info about the superblock and the group\n\
 \t                           descriptors. if you specify a block number\n\
 \t                           and a block size, it will read an alternate \n\
 \t                           superblock. see -backups\n\n\

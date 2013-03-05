@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -22,20 +22,6 @@
  */
 
 
-
-#ifdef LANG_FR
-
-#define OPEN_ERR_TXT "Erreur d'ouverture du système de fichier !\n\nCe fichier n'existe pas ou vous n'avez pas les droits de l'ouvrir.\n\n(vous devez être root pour ouvrir /dev/hdXX)"
-
-#define NON_EXT_ERR_TXT "Erreur d'ouverture du système de fichier !\n\nLe système de fichier n'est pas un système de fichier ext3."
-
-#define MOUNT_WARNING_TXT "Ce systeme de fichier est monté ou corrompu. Demontez le ou bien réparez le avant d'utiliser ext3Viewer. L'utilisation d'ext3Viewer sur une partition montée est déconseillée. Voulez continuer ?"
-
-#define FILE_NAME_TXT "Nom de fichier"
-
-#else
-
-
 #define OPEN_ERR_TXT "Filesystem opening error !\n\nThis file does not exist or you are not allowed to open it.\n\n(you must be root powered to open /dev/hdXX)"
 
 #define NON_EXT_ERR_TXT "Filesystem opening error !\n\nThis filesystem is not a valid ext3. (Bad superblock)"
@@ -43,4 +29,4 @@
 #define MOUNT_WARNING_TXT "This filesystem is mounted or corrupted. Please umount it or fsck it before using ext3Viewer. Using ext3Viewer on mounted partitions is not recommended. Continue anyway ?"
 
 #define FILE_NAME_TXT "filename"
-#endif
+

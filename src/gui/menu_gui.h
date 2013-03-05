@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -35,7 +35,7 @@
 void onAPropos(GtkWidget *pWidget, gpointer pData);
 void onOpenBtn(GtkWidget *pWidget, gpointer pData);
 
-/* cree le menu de navigation et le connecte a la fenetre window */
+// Create the navigation menu and connect it to the window
 GtkWidget *createMenu( GtkWidget *window ); 
 
 extern struct filesystem fs;

@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -30,8 +30,6 @@
 #include "open_gui.h"
 #include "lang.h"
 
-//#define UTF8(string) g_locale_to_utf8(string,-1,NULL,NULL,NULL)
-
 extern struct Window wMain;
 extern struct CadreCentre centre;
 extern struct fileTree tree;
@@ -39,11 +37,11 @@ struct filesystem fs;
 
 void open_file( gchar *path )
 {
-  
+
   int ret;
 
   fs.fd = open_fs ( (char*)path );
- 
+
   if ( fs.fd < 0 ) {
     open_error_dialog();
     // close_fs( fd );
@@ -51,35 +49,33 @@ void open_file( gchar *path )
   }
 
 
-  ret = read_superblock_gui( fs.fd, &fs.sb ); 
+  ret = read_superblock_gui( fs.fd, &fs.sb );
   if ( ret == -1 ) {
-    //error: bad superblock
+    // Error: bad superblock
     superblock_error_dialog();
     fs.isopen = 0;
     close(fs.fd);
   }
   else if ( ret == 1 ) {
-    //the filesystem is mounted
+    // The filesystem is mounted
     ret = superblock_warning_dialog();
     if ( ret == -1 ) {
-      //user don't want to continue
+      // User doesn't want to continue
       fs.isopen = 0;
       close_fs( fs.fd );
     }
     else {
       fs.isopen = 1;
-  //    printf("ouverture du systeme de fichier\n");
       init_tree();
       explore_dir ( fs.fd, &fs.sb, 2, tree.iter);
 
     }
   }
   else {
-    
+
     fs.isopen = 1;
-    //printf("ouverture du systeme de fichier\n");
     init_tree();
-    
+
     explore_dir ( fs.fd, &fs.sb, 2, tree.iter );
   }
 }
@@ -87,11 +83,11 @@ void open_file( gchar *path )
 void open_error_dialog() {
   GtkWidget *error;
 
-  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window), 
-				     GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-				     GTK_BUTTONS_OK,
-				     OPEN_ERR_TXT);
-  
+  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window),
+      GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_OK,
+      OPEN_ERR_TXT);
+
   gtk_dialog_run( GTK_DIALOG(error));
   gtk_widget_destroy( error );
 
@@ -100,11 +96,11 @@ void open_error_dialog() {
 void superblock_error_dialog() {
   GtkWidget *error;
 
-  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window), 
-				     GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-				     GTK_BUTTONS_OK,
-				     NON_EXT_ERR_TXT);
-  
+  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window),
+      GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_OK,
+      NON_EXT_ERR_TXT);
+
   gtk_dialog_run( GTK_DIALOG(error));
   gtk_widget_destroy( error );
 }
@@ -112,21 +108,21 @@ void superblock_error_dialog() {
 int superblock_warning_dialog() {
 
   GtkWidget *question;
-  
-  question = gtk_message_dialog_new( GTK_WINDOW(wMain.window), 
-				     GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
-				     GTK_BUTTONS_YES_NO,
-				     MOUNT_WARNING_TXT);
+
+  question = gtk_message_dialog_new( GTK_WINDOW(wMain.window),
+      GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
+      GTK_BUTTONS_YES_NO,
+      MOUNT_WARNING_TXT);
 
   switch ( gtk_dialog_run( GTK_DIALOG(question) ) ) {
-  case GTK_RESPONSE_YES:
-    gtk_widget_destroy( question );
-    return 0;
-    break;
-  case GTK_RESPONSE_NO:
-    gtk_widget_destroy( question );
-    return -1;
-    break;
+    case GTK_RESPONSE_YES:
+      gtk_widget_destroy( question );
+      return 0;
+      break;
+    case GTK_RESPONSE_NO:
+      gtk_widget_destroy( question );
+      return -1;
+      break;
   }
   return 0;
 }
@@ -135,11 +131,11 @@ int superblock_warning_dialog() {
 void show_warning_dialog( char *string ) {
   GtkWidget *error;
 
-  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window), 
-				     GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
-				     GTK_BUTTONS_OK,
-				     string);
-  
+  error = gtk_message_dialog_new( GTK_WINDOW(wMain.window),
+      GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
+      GTK_BUTTONS_OK,
+      string);
+
   gtk_dialog_run( GTK_DIALOG(error));
   gtk_widget_destroy( error );
 }

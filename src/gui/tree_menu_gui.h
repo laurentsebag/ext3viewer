@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -41,5 +41,5 @@ void popup_menu_onCatSymlink ( GtkWidget *menuitem, gpointer userdata);
 gboolean onPopupMenu (GtkWidget *treeview, gpointer userdata);
 
 void popup_menu (GtkWidget *treeview, GdkEventButton *event,
-		      gpointer userdata);
+    gpointer userdata);
 #endif

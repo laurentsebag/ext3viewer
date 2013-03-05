@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -23,7 +23,7 @@
 
 
 
-#ifndef BLOCK_H  
+#ifndef BLOCK_H
 #define BLOCK_H
 
 #include <stdlib.h>
@@ -37,22 +37,23 @@
 #include "block.h"
 #include "text.h"
 
-int read_block ( int fd, struct ext3_super_block *sb, 
-		  __u32 num, char *block );
+int read_block ( int fd, struct ext3_super_block *sb,
+    __u32 num, char *block );
 
-int read_block_pointer ( int fd, int block_size, 
-			  __u32 num, __u32 *block );
+int read_block_pointer ( int fd, int block_size,
+    __u32 num, __u32 *block );
 
 void print_blocks ( int fd, struct ext3_super_block *sb,
-		    __u32 block_num, short rec_level, int mode );
+    __u32 block_num, short rec_level, int mode );
 
-void print_block_as_bpointer( int fd, struct ext3_super_block *sb, 
-			      __u32 block_num );
+void print_block_as_bpointer( int fd, struct ext3_super_block *sb,
+    __u32 block_num );
 
-void print_block_hexa ( int fd, struct ext3_super_block *sb, __u32 block_num ); 
+void print_block_hexa ( int fd, struct ext3_super_block *sb, __u32 block_num );
 
-void print_block_hexa_noline ( int fd, struct ext3_super_block *sb, __u32 block_num ); 
+void print_block_hexa_noline ( int fd, struct ext3_super_block *sb,
+    __u32 block_num );
 
 void print_block ( int fd, struct ext3_super_block *sb, __u32 block_num );
 
-#endif 
+#endif

@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -26,7 +26,7 @@
 int open_fs ( char * path ) {
   int fd;
 
-  DEBUG_PRINT_V("opening the filesystem %s",path);
+  DEBUG_PRINT_V("opening the filesystem %s", path);
 
   if ( ( fd = open ( path, O_RDONLY /*| O_LARGEFILE | O_NOATIME */) )== -1) {
     perror("Could not open the filesystem ");
@@ -42,7 +42,7 @@ int close_fs ( int fd ) {
     perror("close_fs error");
     return -1;
   }
-  
+
   return 0;
 }
 

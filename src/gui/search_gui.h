@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -45,22 +45,22 @@ GtkWidget *create_search ( struct SearchBar *search );
 void onFind ();
 
 __u32 search_file_rec_gui ( int fd, struct ext3_super_block *sb,
-			__u32 i_num, const regex_t *preg ,
-			struct path_filo *path, char *path_name);
+    __u32 i_num, const regex_t *preg ,
+    struct path_filo *path, char *path_name);
 
-__u32 search_file_rec_block_gui ( int fd, struct ext3_super_block *sb, 
-			      const regex_t *preg, __u32 block_num, 
-			      short rec_level, struct path_filo *path,
-			      char *path_name );
+__u32 search_file_rec_block_gui ( int fd, struct ext3_super_block *sb,
+    const regex_t *preg, __u32 block_num,
+    short rec_level, struct path_filo *path,
+    char *path_name );
 
 int search_inode_rec_gui ( int fd, struct ext3_super_block *sb, __u32 i_num,
-		       __u32 i_tofind, struct path_filo *path, char *path_name );
+    __u32 i_tofind, struct path_filo *path, char *path_name );
 
 int search_inode_gui ( int fd, struct ext3_super_block *sb, __u32 i_num,
-		   __u32 i_tofind );
+    __u32 i_tofind );
 
-int search_inode_rec_block_gui ( int fd, struct ext3_super_block *sb, 
-			     __u32 i_tofind, __u32 block_num, 
-			     short rec_level, struct path_filo *path,
-			     char *path_name ); 
+int search_inode_rec_block_gui ( int fd, struct ext3_super_block *sb,
+    __u32 i_tofind, __u32 block_num,
+    short rec_level, struct path_filo *path,
+    char *path_name );
 #endif

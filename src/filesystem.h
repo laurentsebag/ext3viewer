@@ -44,9 +44,10 @@
 typedef unsigned int __be32;
 typedef unsigned short __be16;
 typedef unsigned int __le32;
-typedef unsigned short __le16; 
+typedef unsigned short __le16;
 
 int open_fs ( char * path );
 int close_fs ( int fd );
 
-#endif 
+#endif
+

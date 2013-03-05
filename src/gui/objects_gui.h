@@ -50,7 +50,6 @@ struct CadreCentre {
   GtkWidget *texte;
   GtkWidget *scrollWin;
   GtkWidget *fileTree;
-    
 };
 
 struct filesystem {

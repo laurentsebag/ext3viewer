@@ -1,5 +1,5 @@
 /*
- *  ext3Viewer,ext3Viewer GUI / an ext3 filesystem low level viewer
+ *  ext3Viewer, ext3Viewer GUI / an ext3 filesystem low level viewer
  *
  *  Copyright (C) 2007 Laurent Sebag & Nathan Periana
  *
@@ -23,7 +23,7 @@
 
 
 
-#ifndef GROUPS_H  
+#ifndef GROUPS_H
 #define GROUPS_H
 
 #include "linux/ext3_fs.h"
@@ -39,29 +39,30 @@
 #include "groups.h"
 
 int read_inodebitmap( int fd, const struct ext3_super_block *sb,
-		      const struct ext3_group_desc *gd,char *inodebitmap);
+    const struct ext3_group_desc *gd, char *inodebitmap);
 int read_datablockbitmap( int fd, const struct ext3_super_block *sb,
-		       const struct ext3_group_desc *gd,const __u32 group_num, char *datablockbitmap);
+    const struct ext3_group_desc *gd, const __u32 group_num,
+    char *datablockbitmap);
 
 int bitmap_test_free(char content );
 
-void read_group_desc(int fd,const struct ext3_super_block *sb, 
-		     __u16 group_num,struct ext3_group_desc *gd);
+void read_group_desc(int fd, const struct ext3_super_block *sb,
+    __u16 group_num, struct ext3_group_desc *gd);
 
 
 void print_groupdesc ( const struct ext3_group_desc *gd) ;
 
 void print_inodebitmap(const struct ext3_super_block *sb, char *inodebitmap,
- __u16 gb_num);
+    __u16 gb_num);
 
-void print_inodeblocknumber(const struct ext3_super_block *sb,__u32 inode_num_g
-, __u16 gb_num);
+void print_inodeblocknumber(const struct ext3_super_block *sb,
+    __u32 inode_num_g, __u16 gb_num);
 
-void print_datablockbitmap(const struct ext3_super_block *sb, 
-			   char *datablockbitmap, __u16 gb_num);
+void print_datablockbitmap(const struct ext3_super_block *sb,
+    char *datablockbitmap, __u16 gb_num);
 
 void print_datablock_blocknumber(const struct ext3_super_block *sb,
-			     __u32 blck_num_g, __u16 gb_num);
+    __u32 blck_num_g, __u16 gb_num);
 
 void print_t_bin( char content );
-#endif 
+#endif
