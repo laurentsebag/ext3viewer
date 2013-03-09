@@ -35,7 +35,6 @@ Current directory is the ext3viewer folder:
 
   - _./        :_ contains makefile, README, INSTALL files, test filesystem image,
     and executable if compiled but not installed.
-  - _./doc/    :_ contains user and developer documentation, and LaTeX sources.
   - _./man/    :_ contains manpages.
   - _./src/    :_ contains source code and internal makefile for the console mode.
   - _./src/gui :_ contains source code, images,
