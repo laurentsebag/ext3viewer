@@ -1,6 +1,6 @@
-ext3Viewer
-==========
-ext3viewer is a low-level ext3 explorer.
+![ext3Viewer](src/gui/img/icon.png) 
+
+__ext3viewer__ is a low-level ext3 explorer.
 It lets you study all the ext3 structures and prints them in a more
 user-friendly form.
 
@@ -20,7 +20,7 @@ Then install ext3Viewer and gext3Viewer with:
 
 Using ext3Viewer
 ----------------
-_ext3Viewer_ is the console program, and _gext3Viewer_ is the graphical
+__ext3Viewer__ is the console program, and __gext3Viewer__ is the graphical
 interface.
 
 Try using `ext3Viewer filesystem -stats` to get the superblock information.
@@ -33,11 +33,11 @@ Project organisation
 --------------------
 Current directory is the ext3viewer folder:
 
-  - _./        :_ contains makefile, README, INSTALL files, test filesystem image,
+  - __./        :__ contains makefile, README, INSTALL files, test filesystem image,
     and executable if compiled but not installed.
-  - _./man/    :_ contains manpages.
-  - _./src/    :_ contains source code and internal makefile for the console mode.
-  - _./src/gui :_ contains source code, images,
+  - __./man/    :__ contains manpages.
+  - __./src/    :__ contains source code and internal makefile for the console mode.
+  - __./src/gui :__ contains source code, images,
     and internal makefile for the graphical mode.
 
 Libraries and versions needed
